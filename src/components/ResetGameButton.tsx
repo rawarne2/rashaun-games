@@ -12,7 +12,7 @@ export const ResetGameButton = ({ className }: { className?: string }) => {
 
   return (
     <button
-      className={`px-2 py-1 max-h-12 bg-red-500 text-white rounded hover:bg-red-600 hover:border-red-800 hover:border-2 ${className}`}
+      className={`px-3 py-1.5 max-h-12 bg-red-500 text-white font-medium rounded-lg hover:bg-red-600 transition-colors ${className}`}
       onClick={onReset}
     >
       Reset Game

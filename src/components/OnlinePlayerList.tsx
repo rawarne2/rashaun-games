@@ -102,7 +102,7 @@ export const OnlinePlayerList: React.FC = () => {
   );
 
   return (
-    <div className='bg-white rounded-xl shadow-sm shadow-blue-900 lg:p-8 p-4 my-4 w-full'>
+    <div className='bg-white rounded-xl shadow-md lg:p-8 p-4 my-4 w-full'>
       <h2 className='text-2xl font-bold text-blue-600 text-center mb-4'>
         Game Room Setup
       </h2>
@@ -115,13 +115,13 @@ export const OnlinePlayerList: React.FC = () => {
         <div className='space-y-4'>
           <button
             onClick={handleCreateRoom}
-            className='w-full py-3 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50'
+            className='w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all disabled:opacity-50 active:scale-[0.98]'
           >
             Create New Room
           </button>
           <button
             onClick={handleJoinRoom}
-            className='w-full py-3 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50'
+            className='w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all disabled:opacity-50 active:scale-[0.98]'
           >
             Join Room
           </button>
@@ -149,13 +149,13 @@ export const OnlinePlayerList: React.FC = () => {
             </svg>
             Back
           </button>
-          <div className='space-y-4'>
+          <form onSubmit={(e) => { e.preventDefault(); handleJoinRoom(); }} className='space-y-4'>
             <input
               type='text'
               placeholder='Enter Room Code'
               value={inputCode}
               onChange={(e) => setInputCode(e.target.value.toUpperCase())}
-              className='w-full py-3 px-4 border border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+              className='w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all'
               maxLength={10}
             />
             <input
@@ -163,17 +163,17 @@ export const OnlinePlayerList: React.FC = () => {
               placeholder='Enter your name'
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className='w-full py-3 px-4 border border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+              className='w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all'
               maxLength={20}
             />
             <button
-              onClick={handleJoinRoom}
-              className='w-full py-3 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+              type='submit'
+              className='w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]'
               disabled={!inputCode || inputCode.length !== 10 || !name.trim()}
             >
               Join Game
             </button>
-          </div>
+          </form>
           {error && <p className='text-red-500 text-sm mt-2'>{error}</p>}
         </div>
       )}
@@ -198,7 +198,7 @@ export const OnlinePlayerList: React.FC = () => {
             </svg>
             Back
           </button>
-          <div className='bg-blue-200 p-4 rounded-lg w-full flex items-center justify-center space-x-2'>
+          <div className='bg-blue-50 border border-blue-200 p-4 rounded-lg w-full flex items-center justify-center space-x-2'>
             <label className='font-semibold'>Room Code:</label>
             <span className='text-xl font-mono font-bold text-blue-600'>
               {roomCode}
@@ -218,19 +218,19 @@ export const OnlinePlayerList: React.FC = () => {
           </div>
 
           {!isNameSubmitted && (mode !== 'ready' || !players?.length) ? (
-            <form onSubmit={handleNameSubmit} className='space-y-4'>
+            <form onSubmit={(e) => { e.preventDefault(); handleNameSubmit(); }} className='space-y-4'>
               <div>
                 <input
                   type='text'
                   placeholder='Enter your name'
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className='w-full py-3 px-4 border border-gray-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                  className='w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all'
                   maxLength={20}
                 />
                 <button
                   type="submit"
-                  className='mt-2 w-full py-3 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed'
+                  className='mt-2 w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]'
                   disabled={!name.trim()}
                 >
                   Create Game
@@ -248,13 +248,13 @@ export const OnlinePlayerList: React.FC = () => {
                   {players?.map((player) => (
                     <li
                       key={player.userId}
-                      className={`relative p-2 rounded-lg flex justify-center items-center ${player.name === name ? 'bg-blue-200' : 'bg-gray-200'}`}
+                      className={`relative p-2.5 rounded-lg flex justify-center items-center ${player.name === name ? 'bg-blue-100' : 'bg-gray-100'}`}
                     >
-                      <div className='flex-1 text-center'>{player.name}</div>
+                      <div className='flex-1 text-center font-medium'>{player.name}</div>
                       {isHost && player.userId !== onlineUserId && (
                         <button
                           onClick={() => handleRemovePlayer(player.userId)}
-                          className='absolute right-2 top-1/2 -translate-y-1/2 bg-red-500 hover:bg-red-700 rounded px-2 text-white text-center h-6'
+                          className='absolute right-2 top-1/2 -translate-y-1/2 bg-red-500 hover:bg-red-600 rounded-lg px-2 text-white text-center h-6 transition-colors'
                         >
                           X
                         </button>
@@ -268,7 +268,7 @@ export const OnlinePlayerList: React.FC = () => {
               </div>
               <button
                 onClick={handleBack}
-                className='w-full py-3 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors'
+                className='w-full py-3 px-4 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors'
               >
                 Leave Room
               </button>

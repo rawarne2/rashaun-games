@@ -436,9 +436,13 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   // goes to setup screen with players still in the game room
   const handleResetGame = () => {
     if (gameMode === GameModes.ONLINE) {
-      // Emit reset-game to server; server broadcasts 'game-reset' to all players in the room
+      // Emit reset-game to server; server broadcasts 'game-reset' to all players including host.
+      // Do NOT reset locally - let handleGameReset (triggered by server's event) be the single
+      // source of truth so targetPlayerIndex and players stay in sync for host and everyone else.
       socket?.emit('reset-game', roomCode);
       setMode('ready');
+      setGameState('setup');
+      return;
     }
     resetGameState();
     // Keep players in the list, but reset their scores

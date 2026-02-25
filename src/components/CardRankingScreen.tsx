@@ -49,7 +49,7 @@ export const CardRankingScreen = () => {
   const targetPlayerName = players[targetPlayerIndex].name;
 
   return (
-    <div className='flex flex-col lg:text-xl w-full items-center h-[calc(100%-2em)] md:h-full'>
+    <div className='flex flex-col lg:text-xl w-full justify-center items-center h-[calc(100%-2em)] md:h-full'>
       <h1 className='lg:text-3xl text-2xl font-bold lg:my-12 md:my-4 mb-4'>
         {
           gameState === 'targetRanking'
@@ -64,7 +64,7 @@ export const CardRankingScreen = () => {
         <div className='flex flex-row mt-2 lg:my-8 justify-center'>
           <button
             onClick={handleSubmitRankings}
-            className={`px-10 py-1 max-h-12 ml-6 bg-green-600 text-white font-semibold rounded hover:bg-green-700 border-2 border-green-800`}
+            className={`px-8 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-lg hover:from-emerald-600 hover:to-teal-700 transition-all shadow-sm active:scale-95 ${!canSubmit ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             Submit Ranking
           </button>

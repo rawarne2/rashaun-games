@@ -8,12 +8,12 @@ export const GameOverScreen = () => {
 
   return (
     <div className='flex flex-col items-center p-4 lg:text-xl'>
-      <h2 className='lg:text-3xl text-2xl font-bold mb-6'>Game Over!</h2>
+      <h2 className='lg:text-3xl text-2xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent'>Game Over!</h2>
 
       {isTie ? (
-        <p className='text-2xl lg:mb-4'>It's a tie!</p>
+        <p className='text-2xl lg:mb-4 font-semibold'>It's a tie!</p>
       ) : (
-        <p className='text-2xl mb-4 text-green-600 font-semibold bg-white rounded-xl shadow-md shadow-blue-900 p-4'>
+        <p className='text-2xl mb-4 font-semibold bg-gradient-to-r from-emerald-500 to-teal-600 bg-clip-text text-transparent bg-white rounded-xl shadow-md p-4'>
           Winner: {winner.name}!
         </p>
       )}
@@ -26,7 +26,7 @@ export const GameOverScreen = () => {
             .map((player, index) => (
               <li
                 key={index}
-                className='flex justify-between items-center p-2 bg-gray-200 rounded'
+                className={`flex justify-between items-center p-3 rounded-lg ${index === 0 ? 'bg-amber-50 ring-2 ring-amber-400 font-semibold' : 'bg-gray-100'}`}
               >
                 <span>{player.name}</span>
                 <span className='pl-4'>{player.score} points</span>
@@ -38,7 +38,7 @@ export const GameOverScreen = () => {
       {isHost && (
         <button
           onClick={handleResetGame}
-          className='mt-6 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600'
+          className='mt-6 px-6 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg hover:from-blue-600 hover:to-indigo-700 font-semibold transition-all shadow-sm active:scale-95'
         >
           End Game
         </button>

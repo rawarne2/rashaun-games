@@ -19,10 +19,10 @@ export const ReviewScreen = () => {
   } = useGameContext();
 
   useEffect(() => {
-    if (gameRoom?.game?.targetRankings) {
+    if (gameRoom?.game?.targetRankings && gameMode === GameModes.ONLINE) {
       setTargetRankings(gameRoom?.game?.targetRankings)
     }
-  }, [gameRoom?.game?.targetRankings, setTargetRankings]);
+  }, [gameRoom?.game?.targetRankings, setTargetRankings, gameMode]);
 
   const playerName = players[targetPlayerIndex].name;
 
@@ -34,17 +34,17 @@ export const ReviewScreen = () => {
 
 
   return (
-    <div className='flex flex-col lg:text-xl w-full items-center justify-between lg:justify-start lg:mb-16 md:px-2 lg:px-0 box-border h-[80vh]'>
-      <h1 className='lg:text-3xl text-2xl font-bold mb-4 lg:mt-4'>
+    <div className='flex flex-col lg:text-xl w-full items-center md:justify-center lg:px-0 box-border h-[80vh] md:h-[100dvh] md:pb-24'>
+      <h1 className='lg:text-3xl text-xl md:text-2xl font-bold mb-2 lg:mt-4'>
         Scores for {players[targetPlayerIndex].name}'s Turn
       </h1>
-      <div className='flex flex-col w-full justify-start h-full'>
+      <div className='flex flex-col w-full'>
         <div className='flex lg:flex-col items-center justify-center mx-auto'>
           <div className='px-1 md:px-2'>
-            <h2 className='font-semibold mb-2 text-xl underline underline-offset-4 text-center'>
+            <h2 className='font-semibold mb-1 lg:mb-2 text-lg lg:text-xl underline underline-offset-4 text-center'>
               {playerName}
             </h2>
-            <div className='lg:grid lg:grid-cols-5 lg:gap-4 flex flex-col justify-evenly'>
+            <div className='lg:grid lg:grid-cols-5 lg:gap-4 flex flex-col gap-1 md:gap-1.5 justify-evenly'>
               {targetRankings.map((card, index) => (
                 <ResultCard
                   key={index}
@@ -58,14 +58,14 @@ export const ReviewScreen = () => {
             </div>
           </div>
 
-          <div className='lg:mt-4 p-1 md:p-2 h-full lg:h-auto overflow-x-auto lg:overflow-y-auto no-scrollbar'>
+          <div className='lg:mt-4 p-1 md:p-2 lg:h-auto overflow-x-auto lg:overflow-y-auto no-scrollbar'>
             {gameMode === GameModes.SINGLE_DEVICE && (
-              <h2 className='font-semibold mb-2 text-xl underline underline-offset-4 text-center'>
+              <h2 className='font-semibold mb-1 lg:mb-2 text-lg lg:text-xl underline underline-offset-4 text-center'>
                 Group
               </h2>
             )}
             {gameMode === GameModes.SINGLE_DEVICE ? (
-              <div className='lg:grid lg:grid-cols-5 lg:gap-4 flex flex-col justify-evenly'>
+              <div className='lg:grid lg:grid-cols-5 lg:gap-4 flex flex-col gap-1 md:gap-1.5 justify-evenly'>
                 {groupPredictions.map((card, index) => {
                   const score = 4 - diffsArray[index];
                   const variant = diffsArray[index] === 0
@@ -89,18 +89,16 @@ export const ReviewScreen = () => {
             ) : (
               <div className='flex lg:max-h-[60vh] pb-2 lg:pb-0 lg:flex-col'>
                 {gameRoom?.players?.filter((_, index) => index !== targetPlayerIndex).map((player) => (
-                  <div className='flex flex-col min-w-max justify-center items-center ml-1 lg:mx-0 bg-gray-200 rounded-lg border-2 border-gray-300 px-1 lg:mb-4' key={player.userId}>
-                    <div className='flex flex-col sm:grid sm:grid-cols-2 justify-center items-center w-full border-b-2 border-gray-300 pb-1 mb-1'>
-                      <h3 className='font-medium text-lg lg:text-xl text-center'>
+                  <div className='flex flex-col min-w-max justify-center items-center ml-1 lg:mx-0 bg-white rounded-xl shadow-md p-2 lg:mb-4' key={player.userId}>
+                    <div className='flex flex-col sm:grid sm:grid-cols-2 justify-center items-center w-full border-b border-gray-200 pb-1 mb-1'>
+                      <h3 className='font-semibold text-base lg:text-xl text-center'>
                         {player.name}
                       </h3>
-                      {gameMode === GameModes.ONLINE && (
-                        <p className='font-medium text-lg lg:text-xl text-center leading-none'>
-                          Score: {player.roundScore || 0}/20
-                        </p>
-                      )}
+                      <p className='font-medium text-base lg:text-xl text-center leading-none'>
+                        Score: {player.roundScore || 0}/20
+                      </p>
                     </div>
-                    <div className='lg:grid lg:grid-cols-5 lg:gap-4 flex flex-col justify-evenly'>
+                    <div className='lg:grid lg:grid-cols-5 lg:gap-4 flex flex-col gap-1 md:gap-1.5 justify-evenly'>
                       {targetRankings.map((_, cardIndex) => {
                         const diff = Math.abs(targetRankings.indexOf(player.rankings?.[cardIndex] || '') - cardIndex);
                         const score = 4 - diff;
@@ -130,15 +128,15 @@ export const ReviewScreen = () => {
           </div>
         </div>
 
-        <div className='flex flex-row md:mt-3 lg:mb-16 pb-2 md:pb-4 justify-evenly bottom-8 lg:bottom-0 fixed w-full'>
+        <div className='flex flex-row py-3 md:pb-4 justify-evenly bottom-8 lg:bottom-10 left-0 fixed w-full bg-white/80 backdrop-blur-sm shadow-[0_-2px_10px_rgba(0,0,0,0.08)]'>
           {gameMode === GameModes.SINGLE_DEVICE && (
-            <p className='text-2xl font-semibold underline underline-offset-4 flex items-center'>
+            <p className='text-xl lg:text-2xl font-semibold flex items-center'>
               Score: {roundScore}/20
             </p>
           )}
           <button
             onClick={handleUpdateScore}
-            className='px-10 py-1 max-h-12 bg-green-600 text-white font-semibold rounded hover:bg-green-700 border-2 border-green-800'
+            className='px-8 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-lg hover:from-emerald-600 hover:to-teal-700 transition-all shadow-sm active:scale-95'
           >
             {isGameOver ? 'End Game' : currentRound < players.length ? 'Next Player' : 'Next Round'}
           </button>

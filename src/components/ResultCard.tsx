@@ -24,8 +24,8 @@ export const ResultCard: React.FC<ResultCardProps> = ({
 }) => {
     // Base responsive classes for the card container
     const baseCardClasses = layout === 'compact'
-        ? "w-[35vw] md:w-[25vw] lg:w-[12vw] h-[10vh] text-sm md:text-base lg:text-lg p-1 lg:p-2"
-        : "w-[40vw] md:w-[30vw] lg:w-[15vw] h-[11vh] min-w-32 max-w-60 text-base md:text-lg lg:text-xl p-1.5 lg:p-4";
+        ? "w-[35vw] md:w-[25vw] lg:w-[12vw] h-[9.5vh] text-sm md:text-base lg:text-lg p-1 lg:p-2"
+        : "w-[40vw] md:w-[30vw] lg:w-[15vw] h-[10vh] lg:h-[11vh] min-w-32 max-w-60 text-sm md:text-base lg:text-xl p-1 lg:p-4";
 
     // Combine with any additional className passed in
     const finalClassName = `${baseCardClasses} ${className}`.trim();
@@ -39,11 +39,11 @@ export const ResultCard: React.FC<ResultCardProps> = ({
             )}
             {showScore && typeof score === 'number' && (
                 <span
-                    className={`inline-flex items-center rounded-md bg-red-50 mr-1 lg:mr-0 justify-center p-1 lg:mb-1 font-medium ring-1 ring-inset text-sm lg:text-base ${score === 4
-                        ? 'text-green-600 ring-green-600'
+                    className={`inline-flex items-center rounded-lg mr-1 lg:mr-0 justify-center px-2 py-0.5 lg:mb-1 font-bold text-xs lg:text-sm ${score === 4
+                        ? 'bg-emerald-100 text-emerald-700'
                         : score >= 2
-                            ? 'text-yellow-600 ring-yellow-600'
-                            : 'text-red-600 ring-red-600'
+                            ? 'bg-amber-100 text-amber-700'
+                            : 'bg-red-100 text-red-700'
                         }`}
                 >
                     +{score}

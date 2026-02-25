@@ -44,7 +44,7 @@ export const WaitingForRankingsScreen = () => {
                     <p className="text-lg">Still waiting for:</p>
                     <ul className="space-y-2 lg:mb-4 mb-2 w-full">
                         {playersWaiting.map((player, index) => (
-                            <li key={`${player}-${index}`} className="p-2 rounded-lg flex-1 flex justify-center items-center bg-gray-200">
+                            <li key={`${player}-${index}`} className="p-2.5 rounded-lg flex-1 flex justify-center items-center bg-gray-100 font-medium">
                                 <div className="flex flex-1 justify-center">{player}</div>
                             </li>
                         ))}
