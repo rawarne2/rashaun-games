@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useGameContext } from '../context/GameContext';
 import { v4 as uuidv4 } from 'uuid';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -9,17 +9,19 @@ export const OnlinePlayerList: React.FC = () => {
   const [inputCode, setInputCode] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [isNameSubmitted, setIsNameSubmitted] = useState<boolean>(false);
+  const hasAttemptedToJoin = Boolean(inputCode.trim() || name.trim());
 
-  const { players, setPlayers, socket, roomCode, setRoomCode, isConnecting, error, setError, mode, setMode, onlineUserId, setOnlineUserId, gameRoom } = useGameContext(); // currentOnlineuserId. 
+  const { players, setPlayers, socket, roomCode, setRoomCode, isConnecting, connectionError, error, setError, mode, setMode, onlineUserId, setOnlineUserId, gameRoom } = useGameContext(); // currentOnlineuserId.
 
-  const newId = uuidv4();
+  const sessionUserId = useMemo(() => uuidv4(), []);
 
   // Handle room creation
   const handleCreateRoom = useCallback(() => {
+    setError('');
     if (socket && socket.connected) {
       socket.emit('create-room');
     }
-  }, [socket]);
+  }, [socket, setError]);
 
   // Handle room joining
   const handleJoinRoom = useCallback(() => {
@@ -29,10 +31,11 @@ export const OnlinePlayerList: React.FC = () => {
     }
 
     if (socket && socket.connected && inputCode.length === 10 && name.trim()) {
-      socket.emit('join-room', { roomCode: inputCode, userId: newId, name: name.trim() });
+      setError('');
+      socket.emit('join-room', { roomCode: inputCode, userId: sessionUserId, name: name.trim() });
       setRoomCode(inputCode);
       setIsNameSubmitted(true);
-      setOnlineUserId(newId);
+      setOnlineUserId(sessionUserId);
     } else if (!name.trim()) {
       setError('Please enter your name');
     } else if (inputCode.length !== 10) {
@@ -40,7 +43,7 @@ export const OnlinePlayerList: React.FC = () => {
     } else {
       setError('Please enter your name and room code');
     }
-  }, [mode, socket, inputCode, name, setMode, newId, setRoomCode, setOnlineUserId, setError]);
+  }, [mode, socket, inputCode, name, setMode, sessionUserId, setRoomCode, setOnlineUserId, setError]);
 
   const handleNameSubmit = useCallback(
     () => {
@@ -50,19 +53,20 @@ export const OnlinePlayerList: React.FC = () => {
         name.trim() &&
         name.length <= 20
       ) {
+        setError('');
         socket.emit('join-room', {
           roomCode,
           name: name.trim(),
-          userId: newId,
+          userId: sessionUserId,
         });
 
         setIsNameSubmitted(true);
-        setOnlineUserId(newId);
+        setOnlineUserId(sessionUserId);
       } else if (!name.trim()) {
         setError('Please enter your name');
       }
     },
-    [socket, roomCode, name, setError, setOnlineUserId, newId, players]
+    [socket, roomCode, name, setError, setOnlineUserId, sessionUserId]
   );
 
   // Handle leaving room
@@ -87,6 +91,10 @@ export const OnlinePlayerList: React.FC = () => {
       setIsNameSubmitted(false);
     }
   }, [mode]);
+
+  useEffect(() => {
+    setError('');
+  }, [mode, setError]);
 
   const isHost = gameRoom?.players?.find((player) => player.userId === onlineUserId)?.isHost;
 
@@ -125,7 +133,7 @@ export const OnlinePlayerList: React.FC = () => {
           >
             Join Room
           </button>
-          {error && <p className='text-red-500 text-sm mt-2'>{error}</p>}
+          {connectionError && <p className='text-red-500 text-sm mt-2'>{connectionError}</p>}
         </div>
       )}
 
@@ -154,7 +162,10 @@ export const OnlinePlayerList: React.FC = () => {
               type='text'
               placeholder='Enter Room Code'
               value={inputCode}
-              onChange={(e) => setInputCode(e.target.value.toUpperCase())}
+              onChange={(e) => {
+                setInputCode(e.target.value.toUpperCase());
+                setError('');
+              }}
               className='w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all'
               maxLength={10}
             />
@@ -162,7 +173,10 @@ export const OnlinePlayerList: React.FC = () => {
               type='text'
               placeholder='Enter your name'
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                setName(e.target.value);
+                setError('');
+              }}
               className='w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all'
               maxLength={20}
             />
@@ -174,7 +188,7 @@ export const OnlinePlayerList: React.FC = () => {
               Join Game
             </button>
           </form>
-          {error && <p className='text-red-500 text-sm mt-2'>{error}</p>}
+          {error && hasAttemptedToJoin && <p className='text-red-500 text-sm mt-2'>{error}</p>}
         </div>
       )}
 
@@ -224,7 +238,10 @@ export const OnlinePlayerList: React.FC = () => {
                   type='text'
                   placeholder='Enter your name'
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => {
+                    setName(e.target.value);
+                    setError('');
+                  }}
                   className='w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all'
                   maxLength={20}
                 />
@@ -236,7 +253,7 @@ export const OnlinePlayerList: React.FC = () => {
                   Create Game
                 </button>
               </div>
-              {error && <p className='text-red-500 text-sm mt-2'>{error}</p>}
+              {error && name.trim() && <p className='text-red-500 text-sm mt-2'>{error}</p>}
             </form>
           ) : (
             <div className='space-y-4'>

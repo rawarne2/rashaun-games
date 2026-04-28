@@ -73,6 +73,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     return localStorage.getItem('roomCode') || '';
   });
   const [isConnecting, setIsConnecting] = useState(false);
+  const [connectionError, setConnectionError] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [mode, setMode] = useState<'select' | 'create' | 'join' | 'ready'>('select');
 
@@ -178,6 +179,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     const handleConnect = () => {
       setIsConnecting(false);
       console.log('connected to server');
+      setConnectionError('');
       setError('');
     };
     setSocket(newSocket);
@@ -185,7 +187,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     const handleDisconnect = () => {
       console.log('disconnected from server');
       setIsConnecting(true);
-      setError('Disconnected from server');
+      setConnectionError('Disconnected from server');
     };
 
     const handleRoomCreated = ({ roomCode }: { roomCode: string }) => {
@@ -262,9 +264,25 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
 
-    const handleError = (errorMessage: Error) => {
+    const handleError = (errorMessage: Error | string | { message?: string }) => {
       console.error('error', errorMessage);
-      setError(String(errorMessage));
+      const text =
+        typeof errorMessage === 'string'
+          ? errorMessage
+          : errorMessage instanceof Error
+            ? errorMessage.message
+            : (errorMessage as { message?: string })?.message ?? String(errorMessage);
+      setError(text);
+    };
+    const handleConnectError = (errorMessage: Error | string | { message?: string }) => {
+      console.error('connect_error', errorMessage);
+      const text =
+        typeof errorMessage === 'string'
+          ? errorMessage
+          : errorMessage instanceof Error
+            ? errorMessage.message
+            : (errorMessage as { message?: string })?.message ?? String(errorMessage);
+      setConnectionError(text);
     };
     const handleOnlineGameStarted = (gameRoom: GameRoom) => {
       // Use the ref to access the current onlineUserId value
@@ -353,9 +371,6 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     // Attach listeners
-    newSocket.on('connect_error', (err) => {
-      console.log('Connection error: ', err);
-    });
     newSocket.on('error', handleError);
     newSocket.on('connect', handleConnect);
     newSocket.on('disconnect', handleDisconnect);
@@ -364,7 +379,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     newSocket.on('player-left', handlePlayerLeft);
     newSocket.on('game-started', handleOnlineGameStarted);
     newSocket.on('increment-turn', handleIncrementTurn);
-    newSocket.on('connect_error', handleError);
+    newSocket.on('connect_error', handleConnectError);
     newSocket.on('rankings-submitted', handleRankingsSubmitted);
     newSocket.on('score-updated', handleScoreUpdated);
     newSocket.on('room-deleted', handleRoomDeleted);
@@ -478,6 +493,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
         setMode('select');
         resetGameState();
         setPlayers([]);
+        setError('');
       }, 400);
       return;
     }
@@ -691,6 +707,8 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     setRoomCode,
     isConnecting,
     setIsConnecting,
+    connectionError,
+    setConnectionError,
     error,
     setError,
     mode,

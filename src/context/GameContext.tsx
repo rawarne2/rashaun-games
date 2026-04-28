@@ -86,6 +86,8 @@ export type GameContextType = {
   setRoomCode: (roomCode: string) => void;
   isConnecting: boolean;
   setIsConnecting: (isConnecting: boolean) => void;
+  connectionError: string;
+  setConnectionError: (error: string) => void;
   error: string;
   setError: (error: string) => void;
   mode: 'select' | 'create' | 'join' | 'ready';

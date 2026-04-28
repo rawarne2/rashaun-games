@@ -56,7 +56,7 @@ export const SetupScreen = () => {
 
   return (
     <div className='flex flex-col w-full md:w-3/4 max-w-screen-sm pt-4 items-center justify-center overflow-y-scroll no-scrollbar'>
-      <h1 className='mb-4 text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent'>
+      <h1 className='mb-4 text-5xl font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent'>
         Preferences
       </h1>
 
