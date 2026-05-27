@@ -28,7 +28,7 @@ const GameContext = createContext<GameContextType | undefined>(undefined);
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const [gameState, setGameState] = useState<GameState>(initialGameState);
-  const [timerInterval, setTimerInterval] = useState<number | null>(null);
+  const [timerInterval, setTimerInterval] = useState<ReturnType<typeof setInterval> | null>(null);
   // const [currentCategoryWords, setCurrentCategoryWords] = useState<Word[]>([]); // fix?
   const getRandomWord = useCallback((category: Category): Word => {
     const categoryWords = wordsByCategory[category];

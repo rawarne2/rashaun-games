@@ -1,5 +1,5 @@
-const warningBeep = new Audio('src/utils/warning-beep.mp3');
-const endBeep = new Audio('src/utils/end-beep.mp3');
+const warningBeep = new Audio('/catchphrase/warning-beep.mp3');
+const endBeep = new Audio('/catchphrase/end-beep.mp3');
 
 export const playWarningBeep = () => {
     warningBeep.currentTime = 0;
