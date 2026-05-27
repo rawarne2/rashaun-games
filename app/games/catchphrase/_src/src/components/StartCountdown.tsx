@@ -27,7 +27,7 @@ export function StartCountdown() {
     <div className='relative p-6 max-w-md mx-auto text-center'>
       <button
         onClick={quitGame}
-        className='absolute top-2 right-2 text-sm text-gray-500 hover:text-gray-700'
+        className='absolute top-2 right-2 bg-gray-500 hover:bg-gray-600 text-white text-sm font-semibold py-1 px-3 rounded-md'
       >
         Quit
       </button>
