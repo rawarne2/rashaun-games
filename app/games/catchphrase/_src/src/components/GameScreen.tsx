@@ -2,7 +2,8 @@ import { useGame } from '../context/GameContext';
 import { Timer } from './Timer';
 
 export function GameScreen() {
-  const { gameState, wordGuessed, passWord, reportViolation } = useGame();
+  const { gameState, wordGuessed, passWord, reportViolation, quitGame } =
+    useGame();
 
   return (
     <div className='p-6 max-w-md mx-auto'>
@@ -42,6 +43,12 @@ export function GameScreen() {
           className='bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg'
         >
           Said Word/Rhyme!
+        </button>
+        <button
+          onClick={quitGame}
+          className='bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg'
+        >
+          Quit
         </button>
       </div>
     </div>

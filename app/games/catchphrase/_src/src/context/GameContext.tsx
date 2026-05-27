@@ -83,12 +83,29 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         selectedCategory: category,
         currentWord: getRandomWord(category),
         currentTeam: prev.startingTeam,
-        gamePhase: 'playing',
+        gamePhase: 'countdown',
+        isWordVisible: false,
       }));
-      startTimer();
     },
-    [getRandomWord, startTimer]
+    [getRandomWord]
   );
+
+  const startPlaying = useCallback(() => {
+    setGameState((prev) => ({
+      ...prev,
+      gamePhase: 'playing',
+      isWordVisible: true,
+    }));
+    startTimer();
+  }, [startTimer]);
+
+  const quitGame = useCallback(() => {
+    if (timerInterval) clearInterval(timerInterval);
+    setGameState((prev) => ({
+      ...initialGameState,
+      startingTeam: prev.startingTeam,
+    }));
+  }, [timerInterval]);
 
   const wordGuessed = useCallback(() => {
     setGameState((prev) => ({
@@ -160,6 +177,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     reportViolation,
     readyForNextTurn,
     endGame,
+    quitGame,
+    startPlaying,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

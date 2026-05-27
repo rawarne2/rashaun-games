@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RashaunGames",
+  title: "Rashaun Games",
   description: "Party games by Rashaun Warner.",
 };
 

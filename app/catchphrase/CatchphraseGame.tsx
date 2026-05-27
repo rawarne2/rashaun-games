@@ -5,6 +5,7 @@ import {
   useGame,
 } from "@/app/games/catchphrase/_src/src/context/GameContext";
 import { CategorySelection } from "@/app/games/catchphrase/_src/src/components/CategorySelection";
+import { StartCountdown } from "@/app/games/catchphrase/_src/src/components/StartCountdown";
 import { GameScreen } from "@/app/games/catchphrase/_src/src/components/GameScreen";
 import { GameOver } from "@/app/games/catchphrase/_src/src/components/GameOver";
 
@@ -43,6 +44,7 @@ function GameContent() {
 
       <main className="max-w-4xl mx-auto py-8 px-6">
         {gameState.gamePhase === "category_selection" && <CategorySelection />}
+        {gameState.gamePhase === "countdown" && <StartCountdown />}
         {gameState.gamePhase === "playing" && <GameScreen />}
         {gameState.gamePhase === "game_over" && <GameOver />}
       </main>

@@ -1,6 +1,7 @@
 import { GameProvider } from './context/GameContext';
 import { useGame } from './context/GameContext';
 import { CategorySelection } from './components/CategorySelection';
+import { StartCountdown } from './components/StartCountdown';
 import { GameScreen } from './components/GameScreen';
 import { GameOver } from './components/GameOver';
 // TODO: if the timer goes off when your team has the phone, the other team gets the point.
@@ -40,6 +41,7 @@ function GameContent() {
 
       <main className='max-w-4xl mx-auto py-8 px-6'>
         {gameState.gamePhase === 'category_selection' && <CategorySelection />}
+        {gameState.gamePhase === 'countdown' && <StartCountdown />}
         {gameState.gamePhase === 'playing' && <GameScreen />}
         {gameState.gamePhase === 'game_over' && <GameOver />}
       </main>

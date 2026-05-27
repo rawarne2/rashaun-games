@@ -9,7 +9,7 @@ export type Category = 'Sports' | 'Movies & TV' | 'Places' | 'Fun and Games' | '
 export interface GameState {
     selectedCategory: Category | null;
     currentWord: Word | null;
-    gamePhase: 'category_selection' | 'playing' | 'game_over';
+    gamePhase: 'category_selection' | 'countdown' | 'playing' | 'game_over';
     currentTeam: 1 | 2;
     timeRemaining: number;
     team1Score: number;
@@ -27,4 +27,6 @@ export interface GameContextType {
     reportViolation: () => void;
     readyForNextTurn: () => void;
     endGame: () => void;
+    quitGame: () => void;
+    startPlaying: () => void;
 }

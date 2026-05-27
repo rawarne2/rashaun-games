@@ -1,7 +1,7 @@
 import { SiteHeader } from "@/components/SiteHeader";
 import { CatchphraseClient } from "./CatchphraseClient";
 
-export const metadata = { title: "Catchphrase — RashaunGames" };
+export const metadata = { title: "Catchphrase — Rashaun Games" };
 
 export default function Page() {
   return (
