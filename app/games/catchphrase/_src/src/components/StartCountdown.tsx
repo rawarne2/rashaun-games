@@ -24,23 +24,21 @@ export function StartCountdown() {
   }, [secondsLeft, startPlaying]);
 
   return (
-    <div className='p-6 max-w-md mx-auto text-center'>
+    <div className='relative p-6 max-w-md mx-auto text-center'>
+      <button
+        onClick={quitGame}
+        className='absolute top-2 right-2 text-sm text-gray-500 hover:text-gray-700'
+      >
+        Quit
+      </button>
+
       <h2 className='text-2xl font-bold text-gray-800 mb-2'>Get Ready!</h2>
       <p className='text-gray-600 mb-2'>Category: {gameState.selectedCategory}</p>
       <p className='text-gray-500 mb-8 text-4xl'>
         Team {gameState.currentTeam}'s Turn
       </p>
 
-      <div className='text-8xl font-bold text-blue-500 mb-8'>{secondsLeft}</div>
-
-      <p className='text-gray-500 mb-8'>Game starts in {secondsLeft}...</p>
-
-      <button
-        onClick={quitGame}
-        className='bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg w-full'
-      >
-        Quit
-      </button>
+      <div className='text-8xl font-bold text-blue-500'>{secondsLeft}</div>
     </div>
   );
 }

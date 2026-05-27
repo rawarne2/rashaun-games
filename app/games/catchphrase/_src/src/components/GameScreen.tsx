@@ -6,7 +6,14 @@ export function GameScreen() {
     useGame();
 
   return (
-    <div className='p-6 max-w-md mx-auto'>
+    <div className='relative p-6 max-w-md mx-auto'>
+      <button
+        onClick={quitGame}
+        className='absolute top-2 right-2 text-sm text-gray-500 hover:text-gray-700'
+      >
+        Quit
+      </button>
+
       <div className='text-center mb-8'>
         <h3 className='text-2xl text-gray-600 mb-2'>
           Category: {gameState.selectedCategory}
@@ -36,19 +43,13 @@ export function GameScreen() {
           onClick={passWord}
           className='bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-lg'
         >
-          Pass (-0.5)
+          Skip (-0.5)
         </button>
         <button
           onClick={reportViolation}
           className='bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg'
         >
           Said Word/Rhyme!
-        </button>
-        <button
-          onClick={quitGame}
-          className='bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg'
-        >
-          Quit
         </button>
       </div>
     </div>
