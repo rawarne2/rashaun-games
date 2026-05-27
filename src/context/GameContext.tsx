@@ -9,7 +9,7 @@ import { GameState, GameContextType, Category, Word } from '../types/game';
 import { wordsByCategory } from '../data/words';
 import { playWarningBeep, playEndBeep } from '../utils/sound';
 
-const ROUND_TIME = 15; // make 60
+const ROUND_TIME = 60; // make 60
 const WARNING_TIME = 10;
 
 const initialGameState: GameState = {
@@ -29,11 +29,20 @@ const GameContext = createContext<GameContextType | undefined>(undefined);
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const [gameState, setGameState] = useState<GameState>(initialGameState);
   const [timerInterval, setTimerInterval] = useState<number | null>(null);
-
+  // const [currentCategoryWords, setCurrentCategoryWords] = useState<Word[]>([]); // fix?
   const getRandomWord = useCallback((category: Category): Word => {
     const categoryWords = wordsByCategory[category];
     const randomIndex = Math.floor(Math.random() * categoryWords.length);
-    return categoryWords[randomIndex];
+    const currentWord = categoryWords.splice(randomIndex, 1);
+    if (currentWord.length === 0) {
+      currentWord[0] = {
+        id: 0,
+        word: 'Ran out of words',
+        category: 'Sports',
+      };
+    }
+    // setCurrentCategoryWords(categoryWords);
+    return currentWord[0];
   }, []);
 
   const startTimer = useCallback(() => {
@@ -90,7 +99,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       currentWord: prev.selectedCategory
         ? getRandomWord(prev.selectedCategory)
         : null,
-      gamePhase: 'turn_transition',
       isWordVisible: true,
     }));
   }, [getRandomWord]);
@@ -116,7 +124,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       currentWord: prev.selectedCategory
         ? getRandomWord(prev.selectedCategory)
         : null,
-      gamePhase: 'turn_transition',
       isWordVisible: true,
     }));
   }, [getRandomWord]);

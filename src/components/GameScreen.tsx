@@ -7,11 +7,11 @@ export function GameScreen() {
   return (
     <div className='p-6 max-w-md mx-auto'>
       <div className='text-center mb-8'>
-        <h3 className='text-xl text-gray-600 mb-2'>
+        <h3 className='text-2xl text-gray-600 mb-2'>
           Category: {gameState.selectedCategory}
         </h3>
         <Timer />
-        <div className='text-sm text-gray-500 mb-4'>
+        <div className='text-gray-500 mb-4 text-4xl'>
           Team {gameState.currentTeam}'s Turn
         </div>
       </div>

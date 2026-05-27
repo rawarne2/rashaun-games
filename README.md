@@ -1,101 +1,60 @@
-### Game Rules:
+# Game Rules
 
-1. Setup & Categories
-   - Game features multiple categories (Sports, Movies & TV, Places, Fun and Games, People)
-   - Teams start by selecting a category
-   - First game starts with Team 1; subsequent games start with alternate team
+## Setup & Categories
 
-2. Basic Gameplay
-   - 60-second timer per game
-   - Warning beeps during final 10 seconds
-   - Active player must:
-     * Look at the word on screen
-     * Memorize it
-     * Put device behind their back
-     * Give verbal clues to their team
+* Players are divided into two teams (Team 1 and Team 2) and players sit in a circle with every other player being on your team.
+* Start the game by selecting a category
+* First game starts with Team 1; subsequent games start with alternate team
 
-3. Guessing Rules
-   - Active player CANNOT:
-     * Say the actual word
-     * Use rhyming words
-     * Say "rhymes with"
-   - Opposing team watches screen to enforce rules
-   - Active team tries to guess word without seeing screen
+## Basic Gameplay
 
-4. Scoring System
-   - Correct guess: 1 point to guessing team
-   - Pass: 0.5 points to opposing team
-   - Rule violation (saying word/rhyme): 1 point to opposing team
-
-5. Turn Changes
-   - After correct guess:
-     * Add point to guessing team
-     * New word appears
-     * Device passes to other team
-   - After violation:
-     * Add point to opposing team
-     * "Team X's Turn" screen appears
-     * New player must press "Ready" after memorizing word
-   - After pass:
-     * Add 0.5 points to opposing team
-     * New word appears
-     * Same team continues
-
-6. Game End
-   - Timer reaches zero
-   - Final score displayed
-   - "Done" button returns to category selection
-   - Next game starts with opposite team
+* 60-second timer per game (default)
+*Warning beeps during final 10 seconds
+*When the game starts, a word appears on the screen. The player holding the device must give hints for their team to guess the word.
 
 
+## Guessing Rules
 
-# React + TypeScript + Vite
+* Active player CANNOT:
+  * Say the actual word (even to confirm a guess)
+  * Use words to rhyme with the word on screen
+* Opposing team watches screen to enforce rules
+* If the opposing team catches the active player breaking those rules, a point goes to the opposing team and it is the opposing team's turn
+* Active team tries to guess word without seeing the screen
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Scoring System
 
-Currently, two official plugins are available:
+* Correct guess: 1 point to guessing team
+* Pass: 0.5 points to opposing team
+* Rule violation (saying word/rhyme): 1 point to opposing team
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+## Turn Changes
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+* After correct guess:
+  * Add point to guessing team
+  * Hand the device to the opposing player to your right
+  * New word appears
+* After violation:
+    1. Hand the device to the opposing player to your right
+    2. Add point to your team (team that caught the violation)
+    3. New word appears
 
-- Configure the top-level `parserOptions` property like this:
+## Pressing pass
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+* Pressing the "Pass" button gives you a new word while maintaining your turn, but it also add 0.5 points to opposing team
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Game End
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+* Timer reaches zero
+* Final score displayed
+* "Done" button returns to category selection
+* Next game starts with opposite team
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+
+TODO: 
+ - add tests
+ - add more guessing words
+ - add more categories
+ - keep track of the score for rounds played
+ - highlight each team's turn (Team 1: blue, Team 2: red)
