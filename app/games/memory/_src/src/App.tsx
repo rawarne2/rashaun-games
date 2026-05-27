@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Typography, Space, Statistic, Button, Modal, Select, Divider, Row, Col } from 'antd';
-import { motion } from 'motion/react';
+import { motion, type Easing } from 'motion/react';
 import { TrophyOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import './App.css';
 
@@ -34,7 +34,7 @@ type AnimateProps = {
 
 interface TransitionProps {
   duration?: number;
-  ease?: string | number[];
+  ease?: Easing | Easing[];
   delay?: number;
   opacity?: { delay: number; duration: number };
 }
