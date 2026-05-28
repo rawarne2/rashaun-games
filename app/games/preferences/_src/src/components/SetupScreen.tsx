@@ -55,7 +55,7 @@ export const SetupScreen = () => {
   const isHost = gameRoom?.players?.find(player => player.userId === onlineUserId)?.isHost;
 
   return (
-    <div className='flex flex-col w-full md:w-3/4 max-w-screen-sm pt-4 items-center justify-center overflow-y-scroll no-scrollbar'>
+    <div className='flex flex-col w-full md:w-3/4 max-w-screen-sm pt-16 md:pt-20 items-center justify-center overflow-y-scroll no-scrollbar'>
       <h1 className='mb-4 text-5xl font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent'>
         Preferences
       </h1>
@@ -192,13 +192,15 @@ export const SetupScreen = () => {
           <OnlinePlayerList />
         )}
         {(gameMode === GameModes.SINGLE_DEVICE || ((mode === 'create' || mode === 'ready') && isHost)) && (
-          <button
-            onClick={handleStartGame}
-            disabled={players?.length < 2}
-            className='mb-4 w-44 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-lg hover:from-emerald-600 hover:to-teal-700 font-semibold transition-all disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed shadow-sm active:scale-95'
-          >
-            Start Game
-          </button>
+          <div className='flex justify-center'>
+            <button
+              onClick={handleStartGame}
+              disabled={players?.length < 2}
+              className='mb-4 w-44 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-lg hover:from-emerald-600 hover:to-teal-700 font-semibold transition-all disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed shadow-sm active:scale-95'
+            >
+              Start Game
+            </button>
+          </div>
         )}
       </div>
     </div>
