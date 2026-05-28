@@ -5,19 +5,21 @@ const games = [
     href: "/preferences",
     title: "Preferences",
     description:
-      "Guess how your friends ranked their preferences. Online multiplayer.",
+      "Guess how your friends ranked their preferences. Online or pass-and-play on one device.",
     accent: "from-blue-600 to-indigo-600",
   },
   {
     href: "/catchphrase",
     title: "Catchphrase",
-    description: "Beat the timer describing words to your team.",
+    description:
+      "Two teams pass the phone, describing words without saying them. Don't be holding it when time runs out.",
     accent: "from-sky-500 to-cyan-500",
   },
   {
     href: "/memory",
     title: "Memory",
-    description: "Classic card-matching memory game.",
+    description:
+      "Study a grid of numbers, colors, and shapes — then recreate it from memory.",
     accent: "from-slate-500 to-zinc-700",
   },
 ];
