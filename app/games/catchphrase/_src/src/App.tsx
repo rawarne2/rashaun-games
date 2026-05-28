@@ -20,7 +20,7 @@ function GameContent() {
   };
 
   return (
-    <div className='min-h-screen bg-gray-100'>
+    <div className='min-h-screen bg-slate-100'>
       <header className='bg-white shadow-sm'>
         <div className='max-w-4xl mx-auto py-4 px-6'>
           <h1 className='text-5xl font-bold text-gray-800 text-center'>

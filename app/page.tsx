@@ -29,7 +29,7 @@ export default function Home() {
     <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center justify-center gap-12 px-6 py-12">
       <header className="text-center">
         <h1 className="bg-gradient-to-r from-blue-700 via-blue-500 to-sky-500 bg-clip-text font-sans text-5xl font-bold tracking-tight text-transparent sm:text-6xl">
-          Rashaun Games
+          Rashaun&apos;s Games
         </h1>
         <p className="mt-3 text-base text-muted-foreground sm:text-lg">
           Pick a game to play.
@@ -47,14 +47,14 @@ export default function Home() {
               className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${game.accent}`}
               aria-hidden
             />
-            <h2 className="font-sans text-2xl font-semibold tracking-tight">
+            <h2 className="font-sans text-3xl font-semibold tracking-tight">
               {game.title}
             </h2>
-            <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-2 flex-1 text-base leading-relaxed text-muted-foreground">
               {game.description}
             </p>
             <span
-              className={`mt-6 inline-flex items-center gap-1 bg-gradient-to-r ${game.accent} bg-clip-text text-sm font-medium text-transparent`}
+              className={`mt-6 inline-flex items-center gap-1 bg-gradient-to-r ${game.accent} bg-clip-text text-base font-medium text-transparent`}
             >
               Play
               <span aria-hidden className="transition group-hover:translate-x-1">

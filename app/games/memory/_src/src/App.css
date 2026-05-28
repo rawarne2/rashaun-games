@@ -25,26 +25,9 @@
   --radius-circle: 50%;
 }
 
-/* Base styles */
-html {
-  height: 100%;
-}
-
-html,
-body {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-body {
-  background-color: var(--color-background);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  color: rgba(0, 0, 0, 0.85);
-  height: 100%;
-}
+/* html/body rules removed: they leaked globally and overrode the Next.js
+   root layout bg on other routes once /memory had been visited. The root
+   layout owns html/body styling. */
 
 .ant-space-item {
   display: flex;

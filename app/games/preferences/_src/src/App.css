@@ -1,16 +1,3 @@
-html,
-body {
-  overscroll-behavior-y: none;
-  background: #013d7537;
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
-}
-
-#root {
-  text-align: center;
-  width: 100%;
-  height: 100dvh;
-
-}
+/* html/body and #root rules removed: they leaked globally and overrode the
+   Next.js root layout (bg, height, flex centering) on other routes once
+   /preferences had been visited. The root layout owns html/body styling. */

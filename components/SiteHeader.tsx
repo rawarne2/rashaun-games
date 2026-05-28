@@ -2,11 +2,11 @@ import Link from "next/link";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-blue-500/30 bg-gradient-to-r from-blue-500/20 via-sky-500/20 to-cyan-500/20 backdrop-blur">
+    <header className="sticky top-0 z-50 w-full border-b border-blue-700/40 bg-blue-50/95 backdrop-blur">
       <div className="mx-auto flex h-12 max-w-5xl items-center justify-between px-4">
         <Link
           href="/"
-          className="bg-gradient-to-r from-blue-800 via-blue-600 to-sky-600 bg-clip-text text-lg font-bold tracking-tight text-transparent"
+          className="text-xl font-extrabold tracking-tight text-blue-900"
         >
           Rashaun Games
         </Link>

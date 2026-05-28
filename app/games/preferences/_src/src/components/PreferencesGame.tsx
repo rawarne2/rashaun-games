@@ -34,7 +34,7 @@ const PreferencesGame: React.FC = () => {
 
   // Render the appropriate screen based on game state
   return (
-    <div className='flex flex-col w-full h-full fixed items-center justify-start'>
+    <div className='flex flex-col w-full flex-1 relative items-center justify-start'>
       {gameState === 'setup' && <SetupScreen />}
       {gameState !== 'setup' && (
         <>
