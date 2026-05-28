@@ -77,9 +77,9 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const [error, setError] = useState<string>('');
   const [mode, setMode] = useState<'select' | 'create' | 'join' | 'ready'>('select');
 
-  const serverUrl = import.meta.env.VITE_WEBSOCKET_SERVER_URL || 'http://localhost:3000';
-  const isProduction = import.meta.env.VITE_IS_PRODUCTION || false;
-  const port = import.meta.env.VITE_PORT || 3000;
+  const serverUrl = process.env.NEXT_PUBLIC_WEBSOCKET_SERVER_URL || 'http://localhost:3000';
+  const isProduction = process.env.NEXT_PUBLIC_IS_PRODUCTION === 'true';
+  const port = process.env.NEXT_PUBLIC_PORT || 3000;
 
   // Persist state to localStorage on change
   useEffect(() => {

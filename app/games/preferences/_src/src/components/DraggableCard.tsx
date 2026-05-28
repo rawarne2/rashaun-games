@@ -14,7 +14,7 @@ export const DraggableCard = ({ card }: { card: string }) => {
 
   return (
     <div
-      ref={drag}
+      ref={(node) => { drag(node); }}
       className={`mb-2 md:mb-3 lg:mb-4 ${isDragging ? 'opacity-50' : ''}`}
     >
       <Card

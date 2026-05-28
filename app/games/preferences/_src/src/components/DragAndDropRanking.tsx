@@ -22,7 +22,7 @@ export const DragAndDropRanking = ({ availableCards, rankedCards, setRankedCards
       <div
         className='z-50'
         style={style}
-        ref={(node) => (ref.current = node as HTMLDivElement | null)}
+        ref={(node) => { ref.current = node as HTMLDivElement | null; }}
         itemRef={String(item)}
         typeof={itemType?.toString()}
       >
