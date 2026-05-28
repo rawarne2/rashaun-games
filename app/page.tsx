@@ -19,7 +19,7 @@ const games = [
     href: "/memory",
     title: "Memory",
     description:
-      "Study a grid of numbers, colors, and shapes — then recreate it from memory.",
+      "Study a grid of numbers, colors, and shapes, then recreate it from memory.",
     accent: "from-slate-500 to-zinc-700",
   },
 ];
