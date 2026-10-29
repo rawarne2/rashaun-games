@@ -33,10 +33,10 @@ export const Card: React.FC<CardProps> = ({
     };
 
     const variantClasses = {
-        default: 'bg-blue-50 border-blue-400',
-        success: 'bg-emerald-50 border-emerald-500',
-        warning: 'bg-amber-50 border-amber-400',
-        error: 'bg-red-50 border-red-400'
+        default: 'bg-blue-50 border-blue-600',
+        success: 'bg-emerald-50 border-emerald-600',
+        warning: 'bg-amber-50 border-amber-500',
+        error: 'bg-red-50 border-red-500'
     };
 
     const textClasses = `

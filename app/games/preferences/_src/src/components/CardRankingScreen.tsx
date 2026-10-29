@@ -50,7 +50,7 @@ export const CardRankingScreen = () => {
 
   return (
     <div className='flex flex-col lg:text-xl w-full justify-center items-center h-[calc(100%-2em)] md:h-full'>
-      <h1 className='lg:text-3xl text-2xl font-bold lg:my-12 md:my-4 mb-4'>
+      <h1 className='lg:text-3xl text-2xl font-bold lg:my-12 md:my-4 mb-4 bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent'>
         {
           gameState === 'targetRanking'
             ? (gameMode === GameModes.SINGLE_DEVICE ? `${targetPlayerName}'s Turn to Rank` : <><div>Your turn {targetPlayerName}!</div><p className='text-sm leading-none'>Rank these cards based on your preferences!</p></>)

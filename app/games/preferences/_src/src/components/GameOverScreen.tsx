@@ -26,7 +26,7 @@ export const GameOverScreen = () => {
             .map((player, index) => (
               <li
                 key={index}
-                className={`flex justify-between items-center p-3 rounded-lg ${index === 0 ? 'bg-amber-50 ring-2 ring-amber-400 font-semibold' : 'bg-gray-100'}`}
+                className={`flex justify-between items-center p-3 rounded-lg ${index === 0 ? 'bg-amber-50 ring-2 ring-amber-400 font-semibold' : 'bg-white border border-gray-200'}`}
               >
                 <span>{player.name}</span>
                 <span className='pl-4'>{player.score} points</span>

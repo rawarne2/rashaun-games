@@ -173,7 +173,7 @@ export const SetupScreen = () => {
             {players?.length > 0 && (
               <ul className='space-y-2 lg:mb-4 mb-2 w-full'>
                 {players.map((player, index) => (
-                  <li key={player.userId} className='p-2.5 rounded-lg flex-1 flex justify-center items-center bg-gray-100'>
+                  <li key={player.userId} className='p-2.5 rounded-lg flex-1 flex justify-center items-center bg-white border border-gray-300'>
                     <div className='flex flex-1 justify-center font-medium'>
                       {player.name}
                     </div>

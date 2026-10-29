@@ -35,7 +35,7 @@ export const ReviewScreen = () => {
 
   return (
     <div className='flex flex-col lg:text-xl w-full items-center md:justify-center lg:px-0 box-border h-[80vh] md:h-[100dvh] md:pb-24'>
-      <h1 className='lg:text-3xl text-xl md:text-2xl font-bold mb-2 lg:mt-4'>
+      <h1 className='lg:text-3xl text-xl md:text-2xl font-bold mb-2 lg:mt-4 bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent'>
         Scores for {players[targetPlayerIndex].name}'s Turn
       </h1>
       <div className='flex flex-col w-full'>
