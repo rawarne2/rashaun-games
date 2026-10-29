@@ -12,7 +12,7 @@ export const LeaveGameButton = ({ className }: { className?: string }) => {
 
   return (
     <button
-      className={`px-3 py-1.5 max-h-12 bg-amber-500 text-white font-medium rounded-lg hover:bg-amber-600 transition-colors ${className}`}
+      className={`px-3 py-1.5 max-h-12 bg-raised text-foreground font-medium rounded-lg hover:bg-raised-hover transition-colors ${className}`}
       onClick={onLeave}
     >
       Leave Game

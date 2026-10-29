@@ -35,7 +35,7 @@ export const ReviewScreen = () => {
 
   return (
     <div className='flex flex-col lg:text-xl w-full items-center md:justify-center lg:px-0 box-border h-[80vh] md:h-[100dvh] md:pb-24'>
-      <h1 className='lg:text-3xl text-xl md:text-2xl font-bold mb-2 lg:mt-4 bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent'>
+      <h1 className='lg:text-3xl text-xl md:text-2xl font-bold mb-2 lg:mt-4 text-foreground'>
         Scores for {players[targetPlayerIndex].name}'s Turn
       </h1>
       <div className='flex flex-col w-full'>
@@ -89,8 +89,8 @@ export const ReviewScreen = () => {
             ) : (
               <div className='flex lg:max-h-[60vh] pb-2 lg:pb-0 lg:flex-col'>
                 {gameRoom?.players?.filter((_, index) => index !== targetPlayerIndex).map((player) => (
-                  <div className='flex flex-col min-w-max justify-center items-center ml-1 lg:mx-0 bg-white rounded-xl shadow-md p-2 lg:mb-4' key={player.userId}>
-                    <div className='flex flex-col sm:grid sm:grid-cols-2 justify-center items-center w-full border-b border-gray-200 pb-1 mb-1'>
+                  <div className='flex flex-col min-w-max justify-center items-center ml-1 lg:mx-0 bg-card ring-1 ring-border rounded-xl shadow-md shadow-black/30 p-2 lg:mb-4' key={player.userId}>
+                    <div className='flex flex-col sm:grid sm:grid-cols-2 justify-center items-center w-full border-b border-border pb-1 mb-1'>
                       <h3 className='font-semibold text-base lg:text-xl text-center'>
                         {player.name}
                       </h3>
@@ -128,7 +128,7 @@ export const ReviewScreen = () => {
           </div>
         </div>
 
-        <div className='flex flex-row py-3 md:pb-4 justify-evenly bottom-8 lg:bottom-10 left-0 fixed w-full bg-white/80 backdrop-blur-sm shadow-[0_-2px_10px_rgba(0,0,0,0.08)]'>
+        <div className='flex flex-row py-3 md:pb-4 justify-evenly bottom-8 lg:bottom-10 left-0 fixed w-full bg-card/90 backdrop-blur-sm shadow-[0_-2px_12px_rgba(0,0,0,0.4)]'>
           {gameMode === GameModes.SINGLE_DEVICE && (
             <p className='text-xl lg:text-2xl font-semibold flex items-center'>
               Score: {roundScore}/20
@@ -136,7 +136,7 @@ export const ReviewScreen = () => {
           )}
           <button
             onClick={handleUpdateScore}
-            className='px-8 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-lg hover:from-emerald-600 hover:to-teal-700 transition-all shadow-sm active:scale-95'
+            className='px-8 py-2.5 bg-orange text-orange-foreground font-semibold rounded-lg hover:bg-orange-hover transition-all shadow-sm active:scale-95'
           >
             {isGameOver ? 'End Game' : currentRound < players.length ? 'Next Player' : 'Next Round'}
           </button>

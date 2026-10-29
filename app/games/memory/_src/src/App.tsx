@@ -319,7 +319,7 @@ const LeaderboardModal: React.FC<LeaderboardModalProps> = ({
       width={400}
       className="game-modal"
       closeIcon={<span className="close-icon" role="button" aria-label="Close">×</span>}
-      maskClosable={true}
+      mask={{ closable: true }}
       keyboard={true}
     >
       <div className="game-modal-container" role="dialog" aria-labelledby="leaderboard-title">
@@ -398,7 +398,7 @@ const GameOverModal: React.FC<GameOverModalProps> = ({
       width={400}
       className="game-modal"
       closeIcon={<span className="close-icon" role="button" aria-label="Close">×</span>}
-      maskClosable={true}
+      mask={{ closable: true }}
       keyboard={true}
     >
       <div className="game-modal-container" role="dialog" aria-labelledby="game-over-title">
@@ -780,11 +780,11 @@ const App: React.FC = () => {
 
   return (
     <div className="game-container">
-      <Title level={1}>Memory Game</Title>
+      <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">Memory</h1>
       <div className="game-status-sr-only" role="status" aria-live="polite">
         {gameStatusText}
       </div>
-      <Space direction="vertical" className="game-space-container">
+      <Space orientation="vertical" className="game-space-container">
         <div className="game-controls-container">
           <Row gutter={12} className="game-stats">
             <Col span={12}>

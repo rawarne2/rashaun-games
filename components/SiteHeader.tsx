@@ -2,17 +2,17 @@ import Link from "next/link";
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-blue-700/40 bg-blue-50/95 backdrop-blur">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/85 backdrop-blur">
       <div className="mx-auto flex h-12 max-w-5xl items-center justify-between px-4">
         <Link
           href="/"
-          className="text-xl font-extrabold tracking-tight text-blue-900"
+          className="text-lg font-extrabold tracking-tight text-foreground sm:text-xl"
         >
-          Rashaun Games
+          Rashaun <span className="text-orange">Games</span>
         </Link>
         <Link
           href="/"
-          className="inline-flex items-center gap-1 rounded-md border border-blue-700 bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-800"
+          className="inline-flex items-center gap-1 rounded-md border border-line-strong bg-raised px-3 py-1.5 text-sm font-semibold text-foreground transition hover:bg-raised-hover"
         >
           ← Home
         </Link>

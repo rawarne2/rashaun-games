@@ -5,8 +5,8 @@ export function Timer() {
 
   return (
     <div
-      className={`text-4xl font-bold mb-4 
-      ${gameState.timeRemaining <= 10 ? 'text-red-500' : 'text-gray-800'}`}
+      className={`text-5xl font-extrabold tabular-nums sm:text-6xl
+      ${gameState.timeRemaining <= 10 ? 'text-danger-soft' : 'text-foreground'}`}
     >
       {gameState.timeRemaining}s
     </div>

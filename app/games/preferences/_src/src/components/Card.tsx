@@ -20,7 +20,7 @@ export const Card: React.FC<CardProps> = ({
     const baseClasses = `
     flex relative items-center justify-center
     text-center break-words select-none
-    border-2 rounded-xl shadow-md
+    border-2 rounded-xl shadow-md shadow-black/30
     transform transition-all
     ${showHover ? 'hover:scale-[1.03] hover:shadow-lg' : ''}
     ${onClick ? 'cursor-pointer' : ''}
@@ -33,10 +33,10 @@ export const Card: React.FC<CardProps> = ({
     };
 
     const variantClasses = {
-        default: 'bg-blue-50 border-blue-600',
-        success: 'bg-emerald-50 border-emerald-600',
-        warning: 'bg-amber-50 border-amber-500',
-        error: 'bg-red-50 border-red-500'
+        default: 'bg-raised border-brand text-foreground',
+        success: 'bg-success/15 border-success text-foreground',
+        warning: 'bg-warning/15 border-warning text-foreground',
+        error: 'bg-danger/15 border-danger text-foreground'
     };
 
     const textClasses = `

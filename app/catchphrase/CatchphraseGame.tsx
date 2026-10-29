@@ -9,40 +9,47 @@ import { StartCountdown } from "@/app/games/catchphrase/_src/src/components/Star
 import { GameScreen } from "@/app/games/catchphrase/_src/src/components/GameScreen";
 import { GameOver } from "@/app/games/catchphrase/_src/src/components/GameOver";
 
+const teamStyles = {
+  1: { active: "border-brand bg-brand/15 text-brand-soft", label: "Team 1" },
+  2: { active: "border-orange bg-orange/10 text-orange", label: "Team 2" },
+} as const;
+
 function GameContent() {
   const { gameState } = useGame();
 
-  const getTeamColor = (activeTeam: 1 | 2, teamBoard: 1 | 2) => {
-    if (activeTeam === teamBoard) {
-      return teamBoard === 1
-        ? "text-blue-500 underline font-bold"
-        : "text-red-500 underline font-bold";
-    } else {
-      return "text-gray-500";
-    }
+  const teamCard = (team: 1 | 2, score: number) => {
+    const isActive = gameState.currentTeam === team;
+    return (
+      <div
+        className={`flex flex-1 flex-col items-center rounded-xl border-2 px-3 py-2 transition-colors sm:py-3 ${
+          isActive ? teamStyles[team].active : "border-border bg-card text-muted-foreground"
+        }`}
+      >
+        <span className="text-xs font-semibold uppercase tracking-wider sm:text-sm">
+          {teamStyles[team].label}
+        </span>
+        <span className={`text-3xl font-extrabold sm:text-4xl ${isActive ? "" : "text-foreground"}`}>
+          {score}
+        </span>
+      </div>
+    );
   };
 
   return (
-    <div className="min-h-screen bg-slate-100">
-      <header className="bg-white shadow-sm">
-        <div className="max-w-4xl mx-auto py-4 px-6">
-          <h1 className="text-5xl font-bold text-gray-800 text-center">
-            Catchphrase
-          </h1>
-          {gameState.gamePhase !== "category_selection" && (
-            <div className="flex justify-between mt-2 text-4xl">
-              <span className={`${getTeamColor(gameState.currentTeam, 1)}`}>
-                Team 1: {gameState.team1Score}
-              </span>
-              <span className={`${getTeamColor(gameState.currentTeam, 2)}`}>
-                Team 2: {gameState.team2Score}
-              </span>
-            </div>
-          )}
-        </div>
-      </header>
+    <div className="min-h-[calc(100dvh-3rem)]">
+      <div className="mx-auto w-full max-w-xl px-4 pt-6 sm:pt-10">
+        <h1 className="text-center text-4xl font-extrabold tracking-tight sm:text-5xl">
+          Catchphrase
+        </h1>
+        {gameState.gamePhase !== "category_selection" && (
+          <div className="mt-4 flex gap-3">
+            {teamCard(1, gameState.team1Score)}
+            {teamCard(2, gameState.team2Score)}
+          </div>
+        )}
+      </div>
 
-      <main className="max-w-4xl mx-auto py-8 px-6">
+      <main className="mx-auto w-full max-w-xl px-4 py-6 sm:py-8">
         {gameState.gamePhase === "category_selection" && <CategorySelection />}
         {gameState.gamePhase === "countdown" && <StartCountdown />}
         {gameState.gamePhase === "playing" && <GameScreen />}

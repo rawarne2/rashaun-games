@@ -24,21 +24,25 @@ export function StartCountdown() {
   }, [secondsLeft, startPlaying]);
 
   return (
-    <div className='relative p-6 max-w-md mx-auto text-center'>
-      <button
-        onClick={quitGame}
-        className='absolute top-2 right-2 bg-gray-500 hover:bg-gray-600 text-white text-sm font-semibold py-1 px-3 rounded-md'
-      >
-        Quit
-      </button>
+    <div className='rounded-2xl border border-border bg-card p-6 text-center shadow-lg shadow-black/20 sm:p-8'>
+      <div className='mb-6 flex items-center justify-between gap-3'>
+        <span className='rounded-full bg-raised px-3 py-1 text-sm font-semibold text-muted-foreground'>
+          {gameState.selectedCategory}
+        </span>
+        <button
+          onClick={quitGame}
+          className='rounded-md border border-line-strong bg-raised px-3 py-1 text-sm font-semibold text-foreground transition-colors hover:bg-raised-hover'
+        >
+          Quit
+        </button>
+      </div>
 
-      <h2 className='text-2xl font-bold text-gray-800 mb-2'>Get Ready!</h2>
-      <p className='text-gray-600 mb-2'>Category: {gameState.selectedCategory}</p>
-      <p className='text-gray-500 mb-8 text-4xl'>
-        Team {gameState.currentTeam}'s Turn
+      <h2 className='text-2xl font-bold'>Get Ready!</h2>
+      <p className='mt-1 text-lg text-muted-foreground'>
+        Team {gameState.currentTeam}&apos;s turn
       </p>
 
-      <div className='text-8xl font-bold text-blue-500'>{secondsLeft}</div>
+      <div className='my-6 text-8xl font-extrabold tabular-nums text-orange sm:text-9xl'>{secondsLeft}</div>
     </div>
   );
 }

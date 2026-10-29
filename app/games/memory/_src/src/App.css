@@ -1,17 +1,17 @@
 :root {
   /* Color variables */
-  --color-primary: #1890ff;
-  --color-secondary: #6B4EFF;
-  --color-success: #52c41a;
-  --color-error: #f5222d;
-  --color-warning: #FF9800;
-  --color-neutral: #8c8c8c;
-  --color-background: #fafafa;
-  --color-body-bg: #f0f2f5;
-  --color-light-blue-bg: rgba(24, 144, 255, 0.1);
-  --color-control-bg: #f5f5f5;
-  --color-secondary-bg: rgba(107, 78, 255, 0.1);
-  --color-focus-outline: rgba(0, 0, 0, 0.85);
+  --color-primary: #3b82f6;
+  --color-secondary: #fb923c;
+  --color-success: #2fae6a;
+  --color-error: #d93f45;
+  --color-warning: #f97316;
+  --color-neutral: #3a4560;
+  --color-background: #232c42;
+  --color-body-bg: #0f1420;
+  --color-light-blue-bg: #232c42;
+  --color-control-bg: #1a2133;
+  --color-secondary-bg: rgba(0, 0, 0, 0.3);
+  --color-focus-outline: #e6e9f0;
   /* Common spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
@@ -56,7 +56,7 @@
 *:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(24, 144, 255, 0.25);
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
 }
 
 .square-container:focus-visible {
@@ -77,7 +77,7 @@
 .ant-select-focused .ant-select-selector {
   outline: 2px solid var(--color-primary);
   border-color: var(--color-primary) !important;
-  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.25);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
 }
 
 /* Square components */
@@ -136,10 +136,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: linear-gradient(135deg, var(--color-light-blue-bg), var(--color-secondary-bg));
-  border-radius: var(--radius-lg);
-  box-shadow: 0px 4px 6px var(--color-secondary-bg);
+  min-height: calc(100dvh - 3rem);
+  padding-top: var(--spacing-lg);
 }
 
 .game-grid {
@@ -158,8 +156,10 @@
 .game-controls-container {
   background-color: var(--color-control-bg);
   padding: var(--spacing-md);
-  border-radius: var(--radius-md);
-  margin-bottom: var(--spacing-sm);
+  border: 1px solid #2a3348;
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-md);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
   /* width: 100%; */
 }
 
@@ -194,7 +194,7 @@
 }
 
 .game-controls__button--start {
-  background-color: var(--color-primary);
+  background-color: #2563eb;
 }
 
 .game-controls__select {
@@ -283,7 +283,7 @@
   width: 24px;
   height: 24px;
   border-radius: var(--radius-circle);
-  background-color: var(--color-primary);
+  background-color: #2563eb;
   color: white;
   font-weight: bold;
 }
@@ -295,9 +295,10 @@
 
 .no-scores {
   padding: var(--spacing-sm);
-  background-color: var(--color-primary);
+  background-color: var(--color-background);
+  border: 1px solid #2a3348;
   border-radius: var(--radius-sm);
-  color: white;
+  color: #8b93a7;
 }
 
 /* =============== MEDIA QUERIES =============== */
@@ -330,9 +331,13 @@
     font-size: 12px;
   }
 
+  .game-stats__item .ant-statistic-content {
+    font-size: 18px;
+    white-space: nowrap;
+  }
+
   .game-container {
-    padding: var(--spacing-sm);
-    height: 100vh;
+    padding: var(--spacing-md) var(--spacing-md) var(--spacing-sm);
   }
 
   .game-controls {
@@ -404,13 +409,13 @@
 /* High contrast mode support for accessibility */
 @media (prefers-contrast: high) {
   :root {
-    --color-primary: #0000ff;
+    --color-primary: #60a5fa;
     --color-secondary: #6000ff;
     --color-success: #008000;
     --color-error: #ff0000;
     --color-warning: #ff8000;
-    --color-neutral: #000000;
-    --color-focus-outline: #000000;
+    --color-neutral: #ffffff;
+    --color-focus-outline: #ffffff;
   }
 
   .square-container:focus-visible,
@@ -421,8 +426,8 @@
   }
 
   .game-container {
-    background: white;
-    border: 2px solid black;
+    background: black;
+    border: 2px solid white;
   }
 }
 

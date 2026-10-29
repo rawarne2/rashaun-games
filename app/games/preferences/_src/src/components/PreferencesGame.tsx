@@ -48,7 +48,7 @@ const PreferencesGame: React.FC = () => {
           <div className='lg:hidden absolute right-2 top-2 z-10' ref={menuRef}>
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className='p-2 rounded-lg bg-white/80 backdrop-blur-sm hover:bg-gray-100 text-gray-700 shadow-md transition-colors'
+              className='p-2 rounded-lg bg-card/90 backdrop-blur-sm hover:bg-raised text-foreground ring-1 ring-border shadow-md shadow-black/30 transition-colors'
               aria-label='Game menu'
             >
               <svg xmlns='http://www.w3.org/2000/svg' className='h-6 w-6' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={2}>
@@ -56,7 +56,7 @@ const PreferencesGame: React.FC = () => {
               </svg>
             </button>
             {menuOpen && (
-              <div className='absolute right-0 mt-1 flex flex-col bg-white rounded-lg shadow-lg border border-gray-100 min-w-[130px] overflow-hidden'>
+              <div className='absolute right-0 mt-1 flex flex-col bg-card rounded-lg shadow-lg shadow-black/40 border border-border min-w-[130px] overflow-hidden'>
                 {isHost && <ResetGameButton className='p-2 !rounded-none !rounded-t' />}
                 {gameMode === GameModes.ONLINE && (
                   <LeaveGameButton className='p-2 !rounded-none !rounded-b' />

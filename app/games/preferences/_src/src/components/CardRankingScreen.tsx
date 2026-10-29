@@ -50,10 +50,10 @@ export const CardRankingScreen = () => {
 
   return (
     <div className='flex flex-col lg:text-xl w-full justify-center items-center h-[calc(100%-2em)] md:h-full'>
-      <h1 className='lg:text-3xl text-2xl font-bold lg:my-12 md:my-4 mb-4 bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent'>
+      <h1 className='lg:text-3xl text-2xl font-bold lg:my-12 md:my-4 mb-4 text-foreground'>
         {
           gameState === 'targetRanking'
-            ? (gameMode === GameModes.SINGLE_DEVICE ? `${targetPlayerName}'s Turn to Rank` : <><div>Your turn {targetPlayerName}!</div><p className='text-sm leading-none'>Rank these cards based on your preferences!</p></>)
+            ? (gameMode === GameModes.SINGLE_DEVICE ? `${targetPlayerName}'s Turn to Rank` : <><div>Your turn {targetPlayerName}!</div><p className='text-sm leading-none font-medium text-muted-foreground'>Rank these cards based on your preferences!</p></>)
             : gameMode === GameModes.SINGLE_DEVICE
               ? `Group Prediction`
               : `Guess ${targetPlayerName}'s Rankings`
@@ -64,7 +64,7 @@ export const CardRankingScreen = () => {
         <div className='flex flex-row mt-2 lg:my-8 justify-center'>
           <button
             onClick={handleSubmitRankings}
-            className={`px-8 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-lg hover:from-emerald-600 hover:to-teal-700 transition-all shadow-sm active:scale-95 ${!canSubmit ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`px-8 py-2.5 bg-orange text-orange-foreground font-semibold rounded-lg hover:bg-orange-hover transition-all shadow-sm active:scale-95 ${!canSubmit ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             Submit Ranking
           </button>

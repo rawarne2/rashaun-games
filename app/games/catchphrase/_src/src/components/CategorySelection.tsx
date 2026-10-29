@@ -12,15 +12,14 @@ export function CategorySelection() {
   ];
 
   return (
-    <div className='p-6 max-w-md mx-auto'>
-      <h2 className='text-2xl font-bold text-center mb-6'>Select a Category</h2>
-      <div className='grid gap-4'>
-        {categories.map((category) => (
+    <div className='rounded-2xl border border-border bg-card p-4 shadow-lg shadow-black/20 sm:p-6'>
+      <h2 className='mb-4 text-center text-xl font-bold sm:text-2xl'>Pick a Category</h2>
+      <div className='grid gap-3 sm:grid-cols-2'>
+        {categories.map((category, i) => (
           <button
             key={category}
             onClick={() => selectCategory(category)}
-            className='bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-6 rounded-lg 
-                     transition-colors text-lg w-full'
+            className={`w-full rounded-xl border border-line-strong bg-raised px-5 py-4 text-lg font-semibold text-foreground transition-colors hover:border-orange hover:bg-raised-hover active:scale-[0.98] ${i === categories.length - 1 ? 'sm:col-span-2' : ''}`}
           >
             {category}
           </button>

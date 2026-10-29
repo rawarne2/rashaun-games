@@ -3,6 +3,7 @@ import { useGameContext } from '../context/GameContext';
 import { v4 as uuidv4 } from 'uuid';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import toast from 'react-hot-toast';
+import { btnBack, btnDanger, btnPrimary, btnRemove, btnSecondary, input, listItem, panel, panelTitle } from './ui';
 
 
 export const OnlinePlayerList: React.FC = () => {
@@ -109,190 +110,163 @@ export const OnlinePlayerList: React.FC = () => {
     [isHost, socket, roomCode]
   );
 
+  const backButton = (
+    <button onClick={handleBack} className={btnBack}>
+      <svg xmlns='http://www.w3.org/2000/svg' className='h-4 w-4' viewBox='0 0 20 20' fill='currentColor' aria-hidden>
+        <path
+          fillRule='evenodd'
+          d='M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z'
+          clipRule='evenodd'
+        />
+      </svg>
+      Back
+    </button>
+  );
+
   return (
-    <div className='bg-white rounded-xl shadow-md lg:p-8 p-4 my-4 w-full'>
-      <h2 className='text-2xl font-bold text-blue-600 text-center mb-4'>
-        Game Room Setup
-      </h2>
+    <section className={`${panel} space-y-4`}>
+      <h2 className={panelTitle}>Game Room</h2>
 
       {isConnecting && (
-        <p className='text-blue-500 text-center'>Connecting to server...</p>
+        <p className='text-center text-brand-soft'>Connecting to server...</p>
       )}
 
       {!isConnecting && mode === 'select' && (
-        <div className='space-y-4'>
-          <button
-            onClick={handleCreateRoom}
-            className='w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all disabled:opacity-50 active:scale-[0.98]'
-          >
+        <div className='grid gap-3 sm:grid-cols-2'>
+          <button onClick={handleCreateRoom} className={`${btnPrimary} w-full py-3`}>
             Create New Room
           </button>
-          <button
-            onClick={handleJoinRoom}
-            className='w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all disabled:opacity-50 active:scale-[0.98]'
-          >
+          <button onClick={handleJoinRoom} className={`${btnSecondary} w-full py-3`}>
             Join Room
           </button>
-          {connectionError && <p className='text-red-500 text-sm mt-2'>{connectionError}</p>}
+          {connectionError && <p className='text-sm text-danger-soft sm:col-span-2'>{connectionError}</p>}
         </div>
       )}
 
       {!isConnecting && mode === 'join' && (
-        <div className='space-y-2'>
-          <button
-            onClick={handleBack}
-            className='text-blue-500 hover:text-blue-600 flex items-center'
-          >
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              className='h-5 w-5 pr-1'
-              viewBox='0 0 20 20'
-              fill='currentColor'
-            >
-              <path
-                fillRule='evenodd'
-                d='M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z'
-                clipRule='evenodd'
-              />
-            </svg>
-            Back
-          </button>
-          <form onSubmit={(e) => { e.preventDefault(); handleJoinRoom(); }} className='space-y-4'>
+        <div className='space-y-4'>
+          {backButton}
+          <form onSubmit={(e) => { e.preventDefault(); handleJoinRoom(); }} className='space-y-3'>
             <input
               type='text'
-              placeholder='Enter Room Code'
+              placeholder='Room code'
               value={inputCode}
               onChange={(e) => {
                 setInputCode(e.target.value.toUpperCase());
                 setError('');
               }}
-              className='w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all'
+              className={`${input} font-mono tracking-widest uppercase`}
               maxLength={10}
             />
             <input
               type='text'
-              placeholder='Enter your name'
+              placeholder='Your name'
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
                 setError('');
               }}
-              className='w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all'
+              className={input}
               maxLength={20}
             />
             <button
               type='submit'
-              className='w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]'
+              className={`${btnPrimary} w-full py-3`}
               disabled={!inputCode || inputCode.length !== 10 || !name.trim()}
             >
               Join Game
             </button>
           </form>
-          {error && hasAttemptedToJoin && <p className='text-red-500 text-sm mt-2'>{error}</p>}
+          {error && hasAttemptedToJoin && <p className='text-sm text-danger-soft'>{error}</p>}
         </div>
       )}
 
       {!isConnecting && (mode === 'create' || mode === 'ready') && (
-        <div className='space-y-2'>
-          <button
-            onClick={handleBack}
-            className='text-blue-500 hover:text-blue-600 flex items-center'
-          >
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              className='h-5 w-5 pr-1'
-              viewBox='0 0 20 20'
-              fill='currentColor'
-            >
-              <path
-                fillRule='evenodd'
-                d='M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z'
-                clipRule='evenodd'
-              />
-            </svg>
-            Back
-          </button>
-          <div className='bg-blue-50 border border-blue-200 p-4 rounded-lg w-full flex items-center justify-center space-x-2'>
-            <label className='font-semibold'>Room Code:</label>
-            <span className='text-xl font-mono font-bold text-blue-600'>
+        <div className='space-y-4'>
+          {backButton}
+          <div className='flex w-full items-center justify-center gap-3 rounded-lg border border-brand/40 bg-brand/10 px-4 py-3'>
+            <span className='text-sm font-semibold text-muted-foreground'>Room Code</span>
+            <span className='font-mono text-xl font-bold tracking-wider text-orange'>
               {roomCode}
             </span>
-            <div className='flex items-center pl-4'>
-              <CopyToClipboard text={roomCode} onCopy={() => toast.success('Room code copied to clipboard!')}>
-                <button
-                  className="hover:bg-blue-300 rounded transition-colors"
-                  title="Copy room code"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
-                  </svg>
-                </button>
-              </CopyToClipboard>
-            </div>
+            <CopyToClipboard text={roomCode} onCopy={() => toast.success('Room code copied to clipboard!')}>
+              <button
+                className='rounded-md p-1.5 text-brand-soft transition-colors hover:bg-brand/20 hover:text-foreground'
+                title='Copy room code'
+                aria-label='Copy room code'
+              >
+                <svg xmlns='http://www.w3.org/2000/svg' className='h-5 w-5' fill='none' viewBox='0 0 24 24' stroke='currentColor' aria-hidden>
+                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3' />
+                </svg>
+              </button>
+            </CopyToClipboard>
           </div>
 
           {!isNameSubmitted && (mode !== 'ready' || !players?.length) ? (
-            <form onSubmit={(e) => { e.preventDefault(); handleNameSubmit(); }} className='space-y-4'>
-              <div>
-                <input
-                  type='text'
-                  placeholder='Enter your name'
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                    setError('');
-                  }}
-                  className='w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all'
-                  maxLength={20}
-                />
-                <button
-                  type="submit"
-                  className='mt-2 w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-indigo-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]'
-                  disabled={!name.trim()}
-                >
-                  Create Game
-                </button>
-              </div>
-              {error && name.trim() && <p className='text-red-500 text-sm mt-2'>{error}</p>}
+            <form onSubmit={(e) => { e.preventDefault(); handleNameSubmit(); }} className='space-y-3'>
+              <input
+                type='text'
+                placeholder='Your name'
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  setError('');
+                }}
+                className={input}
+                maxLength={20}
+              />
+              <button
+                type='submit'
+                className={`${btnPrimary} w-full py-3`}
+                disabled={!name.trim()}
+              >
+                Create Game
+              </button>
+              {error && name.trim() && <p className='text-sm text-danger-soft'>{error}</p>}
             </form>
           ) : (
             <div className='space-y-4'>
               <div>
-                <h3 className='text-xl font-semibold mb-2'>
-                  Players in Room
-                </h3>
-                <ul className='space-y-2 lg:mb-4 mb-2 w-full'>
+                <div className='mb-2 flex items-baseline justify-between'>
+                  <h3 className='font-semibold text-foreground'>Players in Room</h3>
+                  <span className='text-sm text-muted-foreground'>{players?.length ?? 0} joined</span>
+                </div>
+                <ul className='space-y-2'>
                   {players?.map((player) => (
                     <li
                       key={player.userId}
-                      className={`relative p-2.5 rounded-lg flex justify-center items-center ${player.name === name ? 'bg-blue-100' : 'bg-gray-100'}`}
+                      className={`${listItem} ${player.userId === onlineUserId ? '!border-brand/60 !bg-brand/15' : ''}`}
                     >
-                      <div className='flex-1 text-center font-medium'>{player.name}</div>
+                      <span className='flex-1 truncate'>
+                        {player.name}
+                        {player.userId === onlineUserId && <span className='ml-2 text-sm font-normal text-brand-soft'>(you)</span>}
+                      </span>
                       {isHost && player.userId !== onlineUserId && (
                         <button
                           onClick={() => handleRemovePlayer(player.userId)}
-                          className='absolute right-2 top-1/2 -translate-y-1/2 bg-red-500 hover:bg-red-600 rounded-lg px-2 text-white text-center h-6 transition-colors'
+                          className={btnRemove}
+                          aria-label={`Remove ${player.name}`}
+                          title='Remove player'
                         >
-                          X
+                          <svg aria-hidden viewBox='0 0 20 20' fill='currentColor' className='h-4 w-4'>
+                            <path d='M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z' />
+                          </svg>
                         </button>
                       )}
                     </li>
                   ))}
                   {players?.length === 0 && (
-                    <p className=' text-sm'>No players in the room yet.</p>
+                    <p className='text-sm text-muted-foreground'>No players in the room yet.</p>
                   )}
                 </ul>
               </div>
-              <button
-                onClick={handleBack}
-                className='w-full py-3 px-4 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors'
-              >
+              <button onClick={handleBack} className={`${btnDanger} w-full`}>
                 Leave Room
               </button>
             </div>
           )}
         </div>
       )}
-    </div>
+    </section>
   );
 };

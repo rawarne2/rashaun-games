@@ -40,10 +40,10 @@ export const ResultCard: React.FC<ResultCardProps> = ({
             {showScore && typeof score === 'number' && (
                 <span
                     className={`inline-flex items-center rounded-lg mr-1 lg:mr-0 justify-center px-2 py-0.5 lg:mb-1 font-bold text-xs lg:text-sm ${score === 4
-                        ? 'bg-emerald-100 text-emerald-700'
+                        ? 'bg-success/20 text-success-soft'
                         : score >= 2
-                            ? 'bg-amber-100 text-amber-700'
-                            : 'bg-red-100 text-red-700'
+                            ? 'bg-warning/20 text-warning-soft'
+                            : 'bg-danger/20 text-danger-soft'
                         }`}
                 >
                     +{score}

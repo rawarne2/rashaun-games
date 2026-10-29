@@ -6,50 +6,52 @@ export function GameScreen() {
     useGame();
 
   return (
-    <div className='relative p-6 max-w-md mx-auto'>
-      <button
-        onClick={quitGame}
-        className='absolute top-2 right-2 bg-gray-500 hover:bg-gray-600 text-white text-sm font-semibold py-1 px-3 rounded-md'
-      >
-        Quit
-      </button>
+    <div className='flex flex-col gap-4'>
+      <div className='flex items-center justify-between gap-3'>
+        <span className='rounded-full bg-raised px-3 py-1 text-sm font-semibold text-muted-foreground'>
+          {gameState.selectedCategory}
+        </span>
+        <button
+          onClick={quitGame}
+          className='rounded-md border border-line-strong bg-raised px-3 py-1 text-sm font-semibold text-foreground transition-colors hover:bg-raised-hover'
+        >
+          Quit
+        </button>
+      </div>
 
-      <div className='text-center mb-8'>
-        <h3 className='text-2xl text-gray-600 mb-2'>
-          Category: {gameState.selectedCategory}
-        </h3>
+      <div className='text-center'>
         <Timer />
-        <div className='text-gray-500 mb-4 text-4xl'>
-          Team {gameState.currentTeam}'s Turn
-        </div>
+        <p className='mt-1 text-lg font-semibold text-muted-foreground'>
+          Team {gameState.currentTeam}&apos;s turn
+        </p>
       </div>
 
       {gameState.isWordVisible && (
-        <div className='bg-white rounded-lg shadow-lg p-8 mb-8 text-center'>
-          <h2 className='text-4xl font-bold text-gray-800'>
+        <div className='flex min-h-36 items-center justify-center rounded-2xl border-2 border-orange/60 bg-card px-6 py-8 text-center shadow-lg shadow-black/30'>
+          <h2 className='break-words text-4xl font-extrabold text-foreground sm:text-5xl'>
             {gameState.currentWord?.word}
           </h2>
         </div>
       )}
 
-      <div className='grid gap-4'>
+      <div className='grid grid-cols-2 gap-3'>
         <button
           onClick={wordGuessed}
-          className='bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg'
+          className='col-span-2 rounded-xl bg-success px-6 py-5 text-xl font-bold text-white transition-colors hover:bg-success-hover active:scale-[0.98]'
         >
           Correct!
         </button>
         <button
           onClick={passWord}
-          className='bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-lg'
+          className='rounded-xl border border-line-strong bg-raised px-4 py-4 font-bold text-foreground transition-colors hover:bg-raised-hover active:scale-[0.98]'
         >
-          Skip (-0.5)
+          Skip <span className='font-medium text-muted-foreground'>(-0.5)</span>
         </button>
         <button
           onClick={reportViolation}
-          className='bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg'
+          className='rounded-xl bg-danger px-4 py-4 font-bold text-white transition-colors hover:bg-danger-hover active:scale-[0.98]'
         >
-          Said Word/Rhyme!
+          Said Word/Rhyme
         </button>
       </div>
     </div>

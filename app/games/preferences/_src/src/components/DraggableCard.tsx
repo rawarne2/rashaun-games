@@ -21,7 +21,7 @@ export const DraggableCard = ({ card }: { card: string }) => {
         variant="default"
         size="medium"
         showHover={true}
-        className={`bg-blue-50 border-blue-600 shadow-lg hover:shadow-xl ${isDragging ? 'border-red-400 border-4' : ''}`}
+        className={`bg-raised border-brand shadow-lg hover:shadow-xl hover:border-brand-soft ${isDragging ? '!border-orange border-4' : ''}`}
       >
         {card}
       </Card>
