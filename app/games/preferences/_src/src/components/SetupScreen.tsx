@@ -28,11 +28,10 @@ export const SetupScreen = () => {
     setNewPlayerName(e.target.value);
   };
 
-  const newId = uuidv4();
-
   const handleAddPlayer = () => {
-    if (newPlayerName.trim() !== '') {
-      setPlayers([...players, { name: newPlayerName, score: 0, userId: newId }]);
+    const name = newPlayerName.trim();
+    if (name !== '') {
+      setPlayers([...players, { name, score: 0, userId: uuidv4() }]);
       setNewPlayerName('');
     }
   };
@@ -111,7 +110,7 @@ export const SetupScreen = () => {
         {showGameModeInfo && (
           <div className='space-y-2 rounded-lg border border-brand/40 bg-brand/10 p-3 text-sm leading-relaxed'>
             <p>
-              <span className='font-semibold text-brand-soft'>General Rules:</span> Players take turn ranking which cards they prefer from most (1) to least (5). Other players guess the order that the target player ranked the cards. Players score points depending on how close their guess is to the target player's rankings. Only non-target players can score points for that turn.
+              <span className='font-semibold text-brand-soft'>General Rules:</span> Players take turns ranking which cards they prefer from most (1) to least (5). Other players guess the order that the target player ranked the cards. Players score points depending on how close their guess is to the target player's rankings. Only non-target players can score points for that turn.
             </p>
             <p>
               <span className='font-semibold text-brand-soft'>1 Device:</span> Play on a single device with players in person. The players that are not the target player, must agree as a group how the target player ranked the cards.

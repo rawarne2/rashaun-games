@@ -44,6 +44,8 @@ export const DragAndDropRanking = ({ availableCards, rankedCards, setRankedCards
     } else {
       // Card is being moved from the available cards
       const availableIndex = availableCards.indexOf(item);
+      // splice(-1, 1) would delete the last card when the drop target is unknown.
+      if (availableIndex === -1) return;
       updatedAvailableCards.splice(availableIndex, 1);
     }
 

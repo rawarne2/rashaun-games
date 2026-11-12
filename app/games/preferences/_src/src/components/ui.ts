@@ -2,7 +2,7 @@
 // Colors come from the site-wide dark palette tokens in app/globals.css.
 
 const btnBase =
-  'inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 font-semibold transition-colors active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-raised disabled:text-muted-foreground disabled:active:scale-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background';
+  'inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 font-semibold transition-colors active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-raised disabled:text-disabled-foreground disabled:active:scale-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background';
 
 export const btnPrimary = `${btnBase} bg-brand text-white hover:bg-brand-hover`;
 export const btnSuccess = `${btnBase} bg-orange text-orange-foreground hover:bg-orange-hover`;

@@ -17,7 +17,7 @@ const memoryTheme = {
     colorBorder: "#3a4560",
     colorBorderSecondary: "#2a3348",
     colorText: "#e6e9f0",
-    colorTextSecondary: "#8b93a7",
+    colorTextSecondary: "#adb4c5",
     borderRadius: 8,
     fontFamily: "var(--font-nunito), ui-sans-serif, system-ui, sans-serif",
   },

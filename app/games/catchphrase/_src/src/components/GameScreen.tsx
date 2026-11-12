@@ -45,7 +45,7 @@ export function GameScreen() {
           onClick={passWord}
           className='rounded-xl border border-line-strong bg-raised px-4 py-4 font-bold text-foreground transition-colors hover:bg-raised-hover active:scale-[0.98]'
         >
-          Skip <span className='font-medium text-muted-foreground'>(-0.5)</span>
+          Skip <span className='font-medium text-muted-foreground'>(+0.5 other)</span>
         </button>
         <button
           onClick={reportViolation}

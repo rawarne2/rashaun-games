@@ -4,6 +4,7 @@ import React, {
   useState,
   useCallback,
   useEffect,
+  useRef,
 } from 'react';
 import { GameState, GameContextType, Category, Word } from '../types/game';
 import { wordsByCategory } from '../data/words';
@@ -28,66 +29,69 @@ const GameContext = createContext<GameContextType | undefined>(undefined);
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const [gameState, setGameState] = useState<GameState>(initialGameState);
-  const [timerInterval, setTimerInterval] = useState<ReturnType<typeof setInterval> | null>(null);
-  // const [currentCategoryWords, setCurrentCategoryWords] = useState<Word[]>([]); // fix?
-  const getRandomWord = useCallback((category: Category): Word => {
-    const categoryWords = wordsByCategory[category];
-    const randomIndex = Math.floor(Math.random() * categoryWords.length);
-    const currentWord = categoryWords.splice(randomIndex, 1);
-    if (currentWord.length === 0) {
-      currentWord[0] = {
-        id: 0,
-        word: 'Ran out of words',
-        category: 'Sports',
-      };
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timeRemainingRef = useRef(ROUND_TIME);
+  // Fresh copy per game. The shared word lists must stay intact for the next round.
+  const deckRef = useRef<Word[]>([]);
+
+  const clearTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
     }
-    // setCurrentCategoryWords(categoryWords);
-    return currentWord[0];
+  }, []);
+
+  const drawWord = useCallback((category: Category): Word => {
+    const deck = deckRef.current;
+    if (deck.length === 0) {
+      return { id: 0, word: 'Ran out of words', category };
+    }
+    const randomIndex = Math.floor(Math.random() * deck.length);
+    return deck.splice(randomIndex, 1)[0];
   }, []);
 
   const startTimer = useCallback(() => {
-    if (timerInterval) clearInterval(timerInterval);
+    clearTimer();
+    timeRemainingRef.current = ROUND_TIME;
 
-    const interval = setInterval(() => {
-      setGameState((prev) => {
-        const newTime = prev.timeRemaining - 1;
+    timerRef.current = setInterval(() => {
+      const newTime = timeRemainingRef.current - 1;
 
-        if (newTime <= 0) {
-          clearInterval(interval);
-          playEndBeep();
-          return {
-            ...prev,
-            timeRemaining: 0,
-            gamePhase: 'game_over',
-          };
-        }
-
-        if (newTime <= WARNING_TIME) {
-          playWarningBeep();
-        }
-
-        return {
+      if (newTime <= 0) {
+        timeRemainingRef.current = 0;
+        clearTimer();
+        playEndBeep();
+        setGameState((prev) => ({
           ...prev,
-          timeRemaining: newTime,
-        };
-      });
-    }, 1000);
+          timeRemaining: 0,
+          gamePhase: 'game_over',
+        }));
+        return;
+      }
 
-    setTimerInterval(interval);
-  }, []);
+      timeRemainingRef.current = newTime;
+      if (newTime <= WARNING_TIME) playWarningBeep();
+      setGameState((prev) => ({
+        ...prev,
+        timeRemaining: newTime,
+      }));
+    }, 1000);
+  }, [clearTimer]);
 
   const selectCategory = useCallback(
     (category: Category) => {
+      deckRef.current = wordsByCategory[category].map((word) => ({ ...word }));
+      const currentWord = drawWord(category);
       setGameState((prev) => ({
         ...initialGameState,
         selectedCategory: category,
-        currentWord: getRandomWord(category),
+        currentWord,
         currentTeam: prev.startingTeam,
         gamePhase: 'countdown',
         isWordVisible: false,
       }));
     },
-    [getRandomWord]
+    [drawWord]
   );
 
   const startPlaying = useCallback(() => {
@@ -100,50 +104,55 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }, [startTimer]);
 
   const quitGame = useCallback(() => {
-    if (timerInterval) clearInterval(timerInterval);
+    clearTimer();
     setGameState((prev) => ({
       ...initialGameState,
       startingTeam: prev.startingTeam,
     }));
-  }, [timerInterval]);
+  }, [clearTimer]);
+
+  const nextWord = useCallback(
+    (category: Category | null) => (category ? drawWord(category) : null),
+    [drawWord]
+  );
 
   const wordGuessed = useCallback(() => {
+    const currentWord = nextWord(gameState.selectedCategory);
     setGameState((prev) => ({
       ...prev,
       [prev.currentTeam === 1 ? 'team1Score' : 'team2Score']:
         prev.currentTeam === 1 ? prev.team1Score + 1 : prev.team2Score + 1,
       currentTeam: prev.currentTeam === 1 ? 2 : 1,
-      currentWord: prev.selectedCategory
-        ? getRandomWord(prev.selectedCategory)
-        : null,
+      currentWord,
       isWordVisible: true,
     }));
-  }, [getRandomWord]);
+  }, [gameState.selectedCategory, nextWord]);
 
   const passWord = useCallback(() => {
-    setGameState((prev) => ({
-      ...prev,
-      [prev.currentTeam === 1 ? 'team2Score' : 'team1Score']:
-        prev.currentTeam === 1 ? prev.team2Score + 0.5 : prev.team1Score + 0.5,
-      currentWord: prev.selectedCategory
-        ? getRandomWord(prev.selectedCategory)
-        : null,
-      isWordVisible: true,
-    }));
-  }, [getRandomWord]);
+    const currentWord = nextWord(gameState.selectedCategory);
+    setGameState((prev) => {
+      const scoreKey = prev.currentTeam === 1 ? 'team2Score' : 'team1Score';
+      const opposingScore = prev.currentTeam === 1 ? prev.team2Score : prev.team1Score;
+      return {
+        ...prev,
+        [scoreKey]: opposingScore + 0.5,
+        currentWord,
+        isWordVisible: true,
+      };
+    });
+  }, [gameState.selectedCategory, nextWord]);
 
   const reportViolation = useCallback(() => {
+    const currentWord = nextWord(gameState.selectedCategory);
     setGameState((prev) => ({
       ...prev,
       [prev.currentTeam === 1 ? 'team2Score' : 'team1Score']:
         prev.currentTeam === 1 ? prev.team2Score + 1 : prev.team1Score + 1,
       currentTeam: prev.currentTeam === 1 ? 2 : 1,
-      currentWord: prev.selectedCategory
-        ? getRandomWord(prev.selectedCategory)
-        : null,
+      currentWord,
       isWordVisible: true,
     }));
-  }, [getRandomWord]);
+  }, [gameState.selectedCategory, nextWord]);
 
   const readyForNextTurn = useCallback(() => {
     setGameState((prev) => ({
@@ -154,19 +163,14 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const endGame = useCallback(() => {
-    if (timerInterval) clearInterval(timerInterval);
+    clearTimer();
     setGameState((prev) => ({
       ...initialGameState,
       startingTeam: prev.startingTeam === 1 ? 2 : 1,
     }));
-  }, [timerInterval]);
+  }, [clearTimer]);
 
-  // Cleanup timer on unmount
-  useEffect(() => {
-    return () => {
-      if (timerInterval) clearInterval(timerInterval);
-    };
-  }, [timerInterval]);
+  useEffect(() => clearTimer, [clearTimer]);
 
   const value: GameContextType = {
     gameState,

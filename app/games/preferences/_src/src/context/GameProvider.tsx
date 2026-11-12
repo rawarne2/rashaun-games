@@ -4,6 +4,16 @@ import cardDecks from '../data/cardDecks.json'; // TODO: needs optimization
 import { Category, GameContext, GameModes, GameRoom, GameState, Player } from './GameContext';
 import { io, Socket } from 'socket.io-client';
 
+function readStoredJson<T>(key: string, fallback: T): T {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return fallback;
+    return JSON.parse(raw) as T;
+  } catch {
+    return fallback;
+  }
+}
+
 // TODO: use all callbacks instead of useState functions directly. useState functions shouldn't even be exported.
 // is gameRoom not needed since there is a socket.rooms?
 export const GameProvider = ({ children }: { children: React.ReactNode }) => {
@@ -17,7 +27,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     return (localStorage.getItem('gameMode') as GameModes) || 'SINGLE_DEVICE';
   });
   const [players, setPlayers] = useState<Player[]>(() => {
-    return JSON.parse(localStorage.getItem('players') || '[]');
+    return readStoredJson<Player[]>('players', []);
   });
   const [currentRound, setCurrentRound] = useState<number>(() => {
     return parseInt(localStorage.getItem('currentRound') || '1', 10);
@@ -29,18 +39,18 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     return parseInt(localStorage.getItem('targetPlayerIndex') || '0', 10);
   });
   const [currentCards, setCurrentCards] = useState<string[]>(() => {
-    return JSON.parse(localStorage.getItem('currentCards') || '[]');
+    return readStoredJson<string[]>('currentCards', []);
   });
   const [targetRankings, setTargetRankings] = useState<string[]>(() => {
-    return JSON.parse(localStorage.getItem('targetRankings') || '[]');
+    return readStoredJson<string[]>('targetRankings', []);
   });
   const [groupPredictions, setGroupPredictions] = useState<string[]>(() => {
-    return JSON.parse(localStorage.getItem('groupPredictions') || '[]');
+    return readStoredJson<string[]>('groupPredictions', []);
   });
   const [cardDeck, setCardDeck] = useState<string[]>(() => {
-    return cardDecks[
-      (localStorage.getItem('category') as Category) || 'general'
-    ];
+    const saved = readStoredJson<string[]>('cardDeck', []);
+    if (saved.length > 0) return saved;
+    return cardDecks[(localStorage.getItem('category') as Category) || 'general'] ?? [];
   });
   const [onlineUserId, setOnlineUserId] = useState<string>(() => {  // set to '' when resetting game?
     return localStorage.getItem('onlineUserId') || '';
@@ -58,14 +68,13 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   const roomPlayersRef = useRef<Player[]>([]);
 
   const [gameRoom, setGameRoom] = useState<GameRoom>(() => {
-    const saved = localStorage.getItem('gameRoom');
-    return saved ? JSON.parse(saved) : {
+    return readStoredJson<GameRoom>('gameRoom', {
       game: {
         currentRound: 1,
         totalRounds: 5,
         targetPlayerIndex: 0,
-      }
-    };
+      },
+    } as GameRoom);
   });
 
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -87,11 +96,13 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   }, [category]);
 
   useEffect(() => {
+    // A game in progress already has its deck. Reshuffling here would deal
+    // different cards after a refresh or a category change mid-round.
+    if (gameState !== 'setup') return;
     const deck = cardDecks[category];
-    const deckCopy = [...deck];
-    const shuffledDeck = shuffleCards(deckCopy);
-    setCardDeck(shuffledDeck);
-  }, [category]);
+    if (!deck) return;
+    setCardDeck(shuffleCards([...deck]));
+  }, [category, gameState]);
 
   useEffect(() => {
     localStorage.setItem('gameState', gameState);
@@ -128,6 +139,10 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     localStorage.setItem('groupPredictions', JSON.stringify(groupPredictions));
   }, [groupPredictions]);
+
+  useEffect(() => {
+    localStorage.setItem('cardDeck', JSON.stringify(cardDeck));
+  }, [cardDeck]);
 
   useEffect(() => {
     localStorage.setItem('onlineUserId', onlineUserId || '');
@@ -207,10 +222,10 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
       setPlayers(updatedPlayers);
       setMode('ready');
       setError('');
-      setGameRoom({
-        ...gameRoom,
+      setGameRoom((prev) => ({
+        ...prev,
         players: updatedPlayers
-      });
+      }));
     };
 
     const handlePlayerLeft = (updatedPlayers: Player[]) => {
@@ -510,19 +525,30 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
 
     targetRankings.forEach((cardText, index) => {
       const predictionIndex = groupPredictions.indexOf(cardText);
+      // A missing card is a total miss. indexOf's -1 would otherwise
+      // subtract the wrong distance and can push the round score below 0.
+      const distance = predictionIndex === -1
+        ? targetRankings.length - 1
+        : Math.abs(predictionIndex - index);
 
-      total -= Math.abs(predictionIndex - index);
+      total -= distance;
     });
-    return total;
+    return Math.max(0, total);
   };
 
   const roundScore = calculateRoundScore();
+  const roster =
+    gameMode === GameModes.ONLINE && gameRoom?.players?.length
+      ? gameRoom.players
+      : players;
   const isGameOver =
-    currentRound === totalRounds && (targetPlayerIndex + 1 === players.length || targetPlayerIndex + 1 === gameRoom?.players?.length);
+    roster.length > 0 &&
+    currentRound === totalRounds &&
+    targetPlayerIndex + 1 === roster.length;
 
   const getNextCards = () => {
 
-    const turnsFromPreviousRounds = (currentRound - 1) * players.length;
+    const turnsFromPreviousRounds = (currentRound - 1) * roster.length;
     const turnsInCurrentRound = targetPlayerIndex;
     const currentTurns = turnsFromPreviousRounds + turnsInCurrentRound + 1;
     return cardDeck.slice(currentTurns * 5, currentTurns * 5 + 5);
@@ -624,6 +650,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     if (players.length >= 2) {
       // shuffle the card deck and grab enough for the game
       const deck = cardDecks[category];
+      if (!deck) return;
       const deckCopy = [...deck];
       const shuffledDeck = shuffleCards(deckCopy);
       const currentGameDeck = shuffledDeck.slice(0, players.length * 5 * totalRounds);

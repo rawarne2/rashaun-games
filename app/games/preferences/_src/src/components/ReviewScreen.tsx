@@ -15,7 +15,6 @@ export const ReviewScreen = () => {
     gameMode,
     gameRoom,
     setTargetRankings,
-    currentRound
   } = useGameContext();
 
   useEffect(() => {
@@ -24,19 +23,24 @@ export const ReviewScreen = () => {
     }
   }, [gameRoom?.game?.targetRankings, setTargetRankings, gameMode]);
 
-  const playerName = players[targetPlayerIndex].name;
+  const playerName = players[targetPlayerIndex]?.name ?? 'Player';
+  const rosterLength =
+    gameMode === GameModes.ONLINE
+      ? (gameRoom?.players?.length || players.length)
+      : players.length;
+  const morePlayersThisRound = targetPlayerIndex + 1 < rosterLength;
 
   const diffsArray: number[] = [];
   groupPredictions.forEach((cardText, index) => {
     const predictionIndex = targetRankings.indexOf(cardText);
-    diffsArray.push(Math.abs(predictionIndex - index));
+    diffsArray.push(predictionIndex === -1 ? 4 : Math.abs(predictionIndex - index));
   });
 
 
   return (
     <div className='flex flex-col lg:text-xl w-full items-center md:justify-center lg:px-0 box-border h-[80vh] md:h-[100dvh] md:pb-24'>
       <h1 className='lg:text-3xl text-xl md:text-2xl font-bold mb-2 lg:mt-4 text-foreground'>
-        Scores for {players[targetPlayerIndex].name}'s Turn
+        Scores for {playerName}&apos;s Turn
       </h1>
       <div className='flex flex-col w-full'>
         <div className='flex lg:flex-col items-center justify-center mx-auto'>
@@ -100,7 +104,9 @@ export const ReviewScreen = () => {
                     </div>
                     <div className='lg:grid lg:grid-cols-5 lg:gap-4 flex flex-col gap-1 md:gap-1.5 justify-evenly'>
                       {targetRankings.map((_, cardIndex) => {
-                        const diff = Math.abs(targetRankings.indexOf(player.rankings?.[cardIndex] || '') - cardIndex);
+                        const rankedCard = player.rankings?.[cardIndex] ?? '';
+                        const targetIndex = rankedCard ? targetRankings.indexOf(rankedCard) : -1;
+                        const diff = targetIndex === -1 ? 4 : Math.abs(targetIndex - cardIndex);
                         const score = 4 - diff;
                         const variant = diff === 0
                           ? 'success'
@@ -138,7 +144,7 @@ export const ReviewScreen = () => {
             onClick={handleUpdateScore}
             className='px-8 py-2.5 bg-orange text-orange-foreground font-semibold rounded-lg hover:bg-orange-hover transition-all shadow-sm active:scale-95'
           >
-            {isGameOver ? 'End Game' : currentRound < players.length ? 'Next Player' : 'Next Round'}
+            {isGameOver ? 'End Game' : morePlayersThisRound ? 'Next Player' : 'Next Round'}
           </button>
         </div>
       </div>

@@ -164,7 +164,12 @@ const GameSquare: React.FC<GameSquareProps> = ({
       role="button"
       tabIndex={isPlaying ? 0 : -1}
       onClick={() => isPlaying && onClick(item.id)}
-      onKeyDown={(e) => isPlaying && (e.key === 'Enter' || e.key === ' ') && onClick(item.id) && setIsFocused(true)}
+      onKeyDown={(e) => {
+        if (!isPlaying || (e.key !== 'Enter' && e.key !== ' ')) return;
+        e.preventDefault();
+        onClick(item.id);
+        setIsFocused(true);
+      }}
       onBlur={() => setIsFocused(false)}
       className="square-container"
       style={{
@@ -475,10 +480,10 @@ const App: React.FC = () => {
   const displayTimerRef = useRef<NodeJS.Timeout | null>(null);
   const [errorSquare, setErrorSquare] = useState<number | null>(null);
   const [displaySequence, setDisplaySequence] = useState<number[]>([]);
-  const [windowDimensions, setWindowDimensions] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight
-  });
+  const [windowDimensions, setWindowDimensions] = useState(() => ({
+    width: typeof window === 'undefined' ? 0 : window.innerWidth,
+    height: typeof window === 'undefined' ? 0 : window.innerHeight,
+  }));
 
   // Load leaderboard from localStorage on mount
   useEffect(() => {
@@ -584,41 +589,47 @@ const App: React.FC = () => {
     setDisplaySequence([]);
   }, [difficulty, initializeGrid]);
 
-  // Show sequence
+  // Show sequence. Every timeout is tracked so a new round or unmount
+  // cannot leave an old step flipping the board back to "playing".
   useEffect(() => {
-    if (gameState === 'showing') {
-      // Clear revealed set to make sure previous clicks are hidden
-      setRevealed(new Set());
-
-      // Start showing sequence one by one using Framer Motion's staggered animations
-      // We'll use the displaySequence state to control which items to reveal
-      const sequenceTimeout = setTimeout(() => {
-        for (let i = 0; i < sequence.length; i++) {
-          setTimeout(() => {
-            setDisplaySequence(prev => [...prev, sequence[i]]);
-
-            // Hide the item after 1 second
-            setTimeout(() => {
-              setDisplaySequence(prev => prev.filter(id => id !== sequence[i]));
-            }, 1000);
-
-            // Move to next game state when sequence is complete
-            if (i === sequence.length - 1) {
-              setTimeout(() => {
-                setGameState('playing');
-              }, 1500);
-            }
-          }, i * 1500);
-        }
-      }, 500);
-
-      return () => {
-        clearTimeout(sequenceTimeout);
-      };
-    } else if (gameState === 'idle') {
-      // Reset revealed items when starting a new game
-      setRevealed(new Set());
+    if (gameState !== 'showing') {
+      if (gameState === 'idle') {
+        setRevealed(new Set());
+      }
+      return;
     }
+
+    setRevealed(new Set());
+    setDisplaySequence([]);
+
+    const timeouts: ReturnType<typeof setTimeout>[] = [];
+    timeouts.push(setTimeout(() => {
+      sequence.forEach((id, i) => {
+        timeouts.push(setTimeout(() => {
+          setDisplaySequence(prev => [...prev, id]);
+
+          timeouts.push(setTimeout(() => {
+            setDisplaySequence(prev => {
+              const index = prev.lastIndexOf(id);
+              if (index === -1) return prev;
+              const next = [...prev];
+              next.splice(index, 1);
+              return next;
+            });
+          }, 1000));
+
+          if (i === sequence.length - 1) {
+            timeouts.push(setTimeout(() => {
+              setGameState('playing');
+            }, 1500));
+          }
+        }, i * 1500));
+      });
+    }, 500));
+
+    return () => {
+      timeouts.forEach(clearTimeout);
+    };
   }, [gameState, sequence]);
 
   // Handle user click
@@ -637,6 +648,7 @@ const App: React.FC = () => {
       setGameState('lost');
       setRevealed(new Set([id, expected]));
       const time = timeRef.current;
+      setElapsedTime(time);
       const score: Score = { rounds: sequence.length - 1, time, timestamp: Date.now() };
       setTimeout(() => {
         setShowGameOverModal(true);

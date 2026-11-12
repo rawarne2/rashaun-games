@@ -79,7 +79,8 @@
   --secondary: #232c42;
   --secondary-foreground: #e6e9f0;
   --muted: #232c42;
-  --muted-foreground: #8b93a7;
+  --muted-foreground: #adb4c5;
+  --disabled-foreground: #8b93a7;
   --accent: #232c42;
   --accent-foreground: #e6e9f0;
   --destructive: #d93f45;
@@ -159,9 +160,11 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
   }
